@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from punti_interesse.models import *
+
+admin.site.register(TipoInteresse)
+admin.site.register(InteresseSpecifico)
+admin.site.register(QualitaInteresse)
+admin.site.register(EstensioneInteresse)
