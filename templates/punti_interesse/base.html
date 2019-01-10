@@ -1,4 +1,5 @@
 <!doctype html>
+{% load staticfiles %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -13,7 +14,18 @@
     </title>
   </head>
   <body>
-
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap py-1 px-0 shadow">
+      <a class="navbar-brand mx-3" href="#">
+        <img src="{% static "images/logo.png" %}" height="40" alt="">
+      </a>
+      <!-- BEGIN Navbar sections and links -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link text-light" href="#">PUNTI DI INTERESSE</a>
+        </li>
+      </ul>
+      <!-- END Navbar sections and links -->
+    </nav>
     <h1>Hello there.</h1>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
