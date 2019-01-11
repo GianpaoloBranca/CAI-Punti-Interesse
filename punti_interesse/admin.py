@@ -6,4 +6,9 @@ admin.site.register(TipoInteresse)
 admin.site.register(InteresseSpecifico)
 admin.site.register(QualitaInteresse)
 admin.site.register(EstensioneInteresse)
-admin.site.register(PuntoInteresse)
+admin.site.register(ValidazionePunto)
+
+class PuntoInteresseAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('nome', )}
+
+admin.site.register(PuntoInteresse, PuntoInteresseAdmin)

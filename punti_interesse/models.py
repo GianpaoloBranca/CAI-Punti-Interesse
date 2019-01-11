@@ -1,7 +1,10 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 class PuntoInteresse(models.Model):
-    coordinate = models.DecimalField(verbose_name='Coordinate', max_digits=9, decimal_places=6)
+    longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6)
+    latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6)
+
     categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia')
     tipo = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico')
 
@@ -34,12 +37,37 @@ class PuntoInteresse(models.Model):
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
 
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.nome)
+        super(PuntoInteresse, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Punto di Interesse'
         verbose_name_plural = 'Punti di Interesse'
 
     def __str__(self):
         return self.nome
+
+
+class ValidazionePunto(models.Model):
+    punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
+
+    validatore = models.CharField(verbose_name='Nome validatore', max_length=128) # dalla piattaforma del CAI
+    descrizione = models.CharField(verbose_name='Descrizione', max_length=256)
+
+    data = models.DateField(verbose_name='Data validazione', auto_now=True)
+    data_aggiornamento = models.DateField(verbose_name='Data aggiornamento', auto_now=True)
+
+    regione = models.CharField(verbose_name='Regione', max_length=64)
+    comunita_montana = models.CharField(verbose_name='Comunità montana', max_length=128)
+    gruppo_montuoso = models.CharField(verbose_name='Gruppo montuoso', max_length=128)
+    quota = models.IntegerField(verbose_name='Quota')
+
+    class Meta:
+        verbose_name = 'Validazione Punto'
+        verbose_name_plural = 'Validazione Punti'
 
 
 class TipoInteresse(models.Model):
@@ -55,7 +83,7 @@ class TipoInteresse(models.Model):
 
 class InteresseSpecifico(models.Model):
     descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)
-    tipo = models.ForeignKey(TipoInteresse, verbose_name='Tipo', on_delete=models.CASCADE)
+    tipo = models.ForeignKey(TipoInteresse, verbose_name='Tipo', on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = 'Interesse Specifico'
@@ -63,6 +91,7 @@ class InteresseSpecifico(models.Model):
 
     def __str__(self):
         return self.descrizione
+
 
 class QualitaInteresse(models.Model):
     descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)
@@ -73,6 +102,7 @@ class QualitaInteresse(models.Model):
 
     def __str__(self):
         return self.descrizione
+
 
 class EstensioneInteresse(models.Model):
     descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)
