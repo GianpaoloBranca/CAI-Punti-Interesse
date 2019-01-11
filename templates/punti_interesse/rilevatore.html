@@ -11,13 +11,13 @@
             <th scope="col" style="width: 40%">Nome</th>
             <th scope="col" style="width: 20%">Categoria</th>
             <th scope="col" style="width: 20%">Tipo</th>
-            <th scope="col" style="width: 20%">Data</th>
+            <th scope="col" style="width: 20%">Data Inserimento</th>
             </tr>
         </thead>
         <tbody>
             {% for punto in punti %}
             <tr>
-            <td>{{ punto.nome }}</a></td>
+            <td><a href="/pi/ril/{{punto.slug}}">{{ punto.nome }}</a></td>
             <td>{{ punto.categoria }}</td>
             <td>{{ punto.tipo }}</td>
             <td>{{ punto.data }}</td>

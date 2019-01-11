@@ -1,0 +1,10 @@
+{% extends 'punti_interesse/base.html' %}
+{% block main %}
+
+{% if punto %}
+    {{ punto.nome }}
+{% else %}
+Errore! Punto di intersse mancante.
+{% endif %}
+
+{% endblock main %}
