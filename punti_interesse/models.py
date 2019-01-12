@@ -25,7 +25,7 @@ class PuntoInteresse(models.Model):
 
     descr_breve = models.TextField(verbose_name='Descrizione oggetto breve', max_length=256)
     descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024)
-    descr_sito = models.TextField(verbose_name='Descrizione oggetto breve', max_length=256)
+    descr_sito = models.TextField(verbose_name='Descrizione sito', max_length=256)
 
     #stato di conservazione
 

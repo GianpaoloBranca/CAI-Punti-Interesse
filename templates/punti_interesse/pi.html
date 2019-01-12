@@ -1,8 +1,76 @@
 {% extends 'punti_interesse/base.html' %}
+{% load staticfiles %}
+
+{% block links %}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+{% endblock links %}
+
 {% block main %}
 
 {% if punto %}
-    {{ punto.nome }}
+<main role="main" class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 order-2 order-md-1">
+      <img class="img-fluid" src="{% static 'images/placeholder.jpg' %}" alt="Immagine non trovata">
+      <h3 class="pt-2">Descrizione estesa</h3>
+      {{ punto.descr_estesa }}
+      <h4 class="pt-2">Descrizione sito</h4>
+      {{ punto.descr_sito }}
+    </div>
+    <div class="col-md-6 order-1 order-md-2">
+      <h1>{{ punto.nome }}</h1>
+        <i class="fas fa-angle-right"></i> {{ punto.categoria }}
+        <i class="fas fa-angle-double-right"></i> {{ punto.tipo }} <br>
+        <hr>
+        {{ punto.descr_breve }} <br><br>
+        {% if punto.visitabile %}
+          <i class="fas fa-check fa-fw"></i> Visitabile
+        {% else %}
+          <i class="fas fa-times fa-fw"></i> Non visitabile
+        {% endif %}
+        <br>
+        {% if punto.visitabile2 %}
+          <i class="fas fa-check fa-fw"></i> Visitabile per persone con ridotta capacità motoria o sensoriale
+        {% else %}
+          <i class="fas fa-times fa-fw"></i> Non visitabile per persone con ridotta capacità motoria o sensoriale
+        {% endif %}
+        <br><br>
+        <dl class="row">
+          <dt class="col-sm-3">Coordinate</dt>
+          <dd class="col-sm-9">{{ punto.latitudine }} ; {{ punto.longitudine }}</dd>
+          <dt class="col-sm-3">Località</dt>
+          <dd class="col-sm-9">{{ punto.localita }}</dd>
+          <dt class="col-sm-3">Valle</dt>
+          <dd class="col-sm-9">{{ punto.valle }}</dd>
+          <dt class="col-sm-3">Qualità</dt>
+          <dd class="col-sm-9">{{ punto.qualita }}</dd>
+          <dt class="col-sm-3">Estensione</dt>
+          <dd class="col-sm-9">{{ punto.estensione }}</dd>
+          <dt class="col-sm-3">Stato di conservazione</dt>
+          <dd class="col-sm-9">_Buono</dd>
+          <dt class="col-sm-3">Periodo di visita</dt>
+          <dd class="col-sm-9">{{ punto.periodo }}</dd>
+          <dt class="col-sm-3">Valenza</dt>
+          <dd class="col-sm-9">{{ punto.valenza }}</dd>
+          <dt class="col-sm-3">Istituto di tutela</dt>
+          <dd class="col-sm-9">{{ punto.valenza }}</dd>
+          <dt class="col-sm-3">Motivo della fruizione</dt>
+          <dd class="col-sm-9">{{ punto.motivo }}</dd>
+          <dt class="col-sm-3">Riferimenti bibliografici</dt>
+          <dd class="col-sm-9">_biblio</dd>
+          <dt class="col-sm-3">Riferimenti sitografici</dt>
+          <dd class="col-sm-9">_sito</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="row pt-2">
+      <div class="col-md-12">
+        <hr>
+        Rilevato da _Peppo il {{ punto.data }}
+      </div>
+    </div>
+  </div>
+</main>
 {% else %}
 Errore! Punto di intersse mancante.
 {% endif %}

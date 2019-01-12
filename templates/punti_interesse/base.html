@@ -9,11 +9,14 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
+    {% block links %}
+
+    {% endblock links %}
     <title>
       CAI
     </title>
   </head>
-  <body style='padding-top:100px'>
+  <body style='padding-top:80px'>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap py-1 px-0 shadow">
       <a class="navbar-brand mx-3" href="#">
         <img src="{% static "images/logo.png" %}" height="40" alt="">
