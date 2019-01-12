@@ -1,34 +1,38 @@
 {% extends 'punti_interesse/base.html' %}
 {% block main %}
 
-<main role="main" class="col-md-12">
-    <h1 class="pl-3">Punti di Interesse:</h1>
-    <ul class="p-3">
-    {% if punti %}
+<main role="main" class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="pl-3">Punti di Interesse:</h1>
+      <ul class="p-3">
+      {% if punti %}
         <table class="table table-sm table-bordered">
         <thead class="thead-light">
-            <tr>
-            <th scope="col" style="width: 40%">Nome</th>
-            <th scope="col" style="width: 20%">Categoria</th>
-            <th scope="col" style="width: 20%">Tipo</th>
-            <th scope="col" style="width: 20%">Data Inserimento</th>
-            </tr>
+          <tr>
+          <th scope="col" style="width: 40%">Nome</th>
+          <th scope="col" style="width: 20%">Categoria</th>
+          <th scope="col" style="width: 20%">Tipo</th>
+          <th scope="col" style="width: 20%">Data Inserimento</th>
+          </tr>
         </thead>
         <tbody>
-            {% for punto in punti %}
-            <tr>
-            <td><a href="/pi/ril/{{punto.slug}}">{{ punto.nome }}</a></td>
-            <td>{{ punto.categoria }}</td>
-            <td>{{ punto.tipo }}</td>
-            <td>{{ punto.data }}</td>
-            </tr>
-            {% endfor %}
+          {% for punto in punti %}
+          <tr>
+          <td><a href="/pi/ril/{{punto.slug}}">{{ punto.nome }}</a></td>
+          <td>{{ punto.categoria }}</td>
+          <td>{{ punto.tipo }}</td>
+          <td>{{ punto.data }}</td>
+          </tr>
+          {% endfor %}
         </tbody>
         </table>
-    {% else %}
-    <li>Errore! Nessun punto di interesse disponibile</li>
-    {% endif %}
-    </ul>
+      {% else %}
+      <li>Errore! Nessun punto di interesse disponibile</li>
+      {% endif %}
+      </ul>
+    </div>
+  </div>
 </main>
 
 {% endblock main %}
