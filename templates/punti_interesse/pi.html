@@ -38,9 +38,9 @@
     </div>
     <div class="col-md-6 order-1 order-md-2">
       <span class="h1">{{ punto.nome }}</span>
-      <div class="float-right pt-2"><a class="btn btn-primary btn-sm" href="#">modifica</a></div><br>
-      <!--<i class="fas fa-angle-right"></i>--> {{ punto.categoria }} -
-      <!--<i class="fas fa-angle-double-right"></i>--> {{ punto.tipo }} <br>
+      <div class="float-right pt-2"><a class="btn btn-primary btn-sm" href="/pi/ril/{{ punto.slug }}/edit">modifica</a></div><br>
+      {{ punto.categoria }} -
+      {{ punto.tipo }} <br>
       <hr>
       {{ punto.descr_breve }} <br><br>
       {% if punto.visitabile %}

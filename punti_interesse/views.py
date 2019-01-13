@@ -14,9 +14,18 @@ def validatore(request):
 
 def show_pi_ril(request, pi_name_slug):
     context_dict = {}
-    try:
-        punto_interesse = PuntoInteresse.objects.get(slug=pi_name_slug)
-        context_dict['punto'] = punto_interesse
-    except PuntoInteresse.DoesNotExist:
-        context_dict['punto'] = None
+    context_dict['punto'] = get_pi(pi_name_slug)
     return render(request, 'punti_interesse/pi.html', context_dict)
+
+def edit_pi(request, pi_name_slug):
+    context_dict = {}
+    context_dict['punto'] = get_pi(pi_name_slug)
+    return render(request, 'punti_interesse/edit-pi.html', context_dict)
+
+#______________________________________________________________________________
+
+def get_pi(pi_name_slug):
+    try:
+        return PuntoInteresse.objects.get(slug=pi_name_slug)
+    except PuntoInteresse.DoesNotExist:
+        return None
