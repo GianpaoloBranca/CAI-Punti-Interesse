@@ -5,7 +5,12 @@
 {% block main %}
 {% if form %}
 <div class="container">
-{% bootstrap_form form %}
+  {{ punto.slug }}
+  <form id="pi-form" method="POST" action="/pi/ril/{{ punto.slug }}/edit/">
+  {% bootstrap_form form %}
+  {% csrf_token %}
+  {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+  </form>
 </div>
 {% else %}
 <p>Form mancante</p>

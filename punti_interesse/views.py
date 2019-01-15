@@ -23,14 +23,16 @@ def show_pi_ril(request, pi_name_slug):
 
 def edit_pi(request, pi_name_slug):
 
+    punto = get_pi(pi_name_slug)
+
     if request.method == 'POST':
-        form = PuntoInteresseForm(request.POST)
+        form = PuntoInteresseForm(request.POST, instance=punto)
 
         if form.is_valid():
             form.save(commit=True)
             return show_pi_ril(request, pi_name_slug)
 
-    punto = get_pi(pi_name_slug)
+
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['form'] = PuntoInteresseForm(instance=punto)
