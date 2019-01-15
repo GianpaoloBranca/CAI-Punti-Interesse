@@ -69,6 +69,8 @@ class ValidazionePunto(models.Model):
         verbose_name = 'Validazione Punto'
         verbose_name_plural = 'Validazione Punti'
 
+    def __str__(self):
+        return str(self.punto)
 
 class TipoInteresse(models.Model):
     descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)

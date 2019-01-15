@@ -10,9 +10,11 @@
 
 {% if punto %}
 <main role="main" class="container">
-  <!--<div class="alert alert-warning" role="alert">
-    <i class="fas fa-exclamation-triangle"></i> _Questo punto di interesse non è ancora stato validato
-  </div>-->
+  {% if not val %}
+  <div class="alert alert-warning" role="alert">
+    <i class="fas fa-exclamation-triangle"></i> Questo punto di interesse non è ancora stato validato
+  </div>
+  {% endif %}
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
       <img class="img-fluid rounded" src="{% static 'images/placeholder.jpg' %}" alt="Immagine non trovata">
@@ -83,29 +85,34 @@
       </dl>
     </div>
   </div>
+  {% if val %}
   <div class="row">
     <div class="col-md-12 pt-2 rounded" style="background-color:#e1e8f0">
       <h2>Validazione</h2>
       <div class="row">
         <div class="col-md-6">
-          <p class="text-justify">_{% lorem 1 %}</p>
+          <p class="text-justify">{{ val.descrizione }}</p>
         </div>
         <div class="col-md-6">
           <dl class="row">
             <dt class="col-sm-5">Regione</dt>
-            <dd class="col-sm-7">_Lombardia</dd>
+            <dd class="col-sm-7">{{ val.regione }}</dd>
             <dt class="col-sm-5">Comunità montana</dt>
-            <dd class="col-sm-7">_Montanari</dd>
+            <dd class="col-sm-7">{{ val.comunita_montana }}</dd>
             <dt class="col-sm-5">Gruppo montuoso</dt>
-            <dd class="col-sm-7">_Dolomiti</dd>
+            <dd class="col-sm-7">{{ val.gruppo_montuoso }}</dd>
             <dt class="col-sm-5">Quota</dt>
-            <dd class="col-sm-7">_100</dd>
+            <dd class="col-sm-7">{{ val.quota }}</dd>
           </dl>
         </div>
       </div>
-      <p><i>Eseguita da </i><b>_Tizio</b> il <b>_5 Luglio 2018.</b> <br><i>Ultimo Aggiornamento:</i><b>_6 Settembre 2018</b></p>
+      <p><i>
+        Eseguita da <b>{{ val.validatore }}</b> il <b>{{ val.data }}.</b><br>
+        Ultimo Aggiornamento:<b>{{ val.data_aggiornamento }}</b>
+      </i></p>
     </div>
   </div>
+  {% endif %}
   <br>
   <p><i>Punto di interesse rilevato da</i><b> _Pino</b> il <b>{{ punto.data }}</b><p>
 </main>

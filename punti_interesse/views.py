@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from punti_interesse.models import PuntoInteresse
+from punti_interesse.models import PuntoInteresse, ValidazionePunto
 
 def index(request):
     return render(request, 'punti_interesse/index.html')
@@ -14,7 +14,9 @@ def validatore(request):
 
 def show_pi_ril(request, pi_name_slug):
     context_dict = {}
-    context_dict['punto'] = get_pi(pi_name_slug)
+    punto = get_pi(pi_name_slug)
+    context_dict['punto'] = punto
+    context_dict['val'] = get_val(punto)
     return render(request, 'punti_interesse/pi.html', context_dict)
 
 def edit_pi(request, pi_name_slug):
@@ -28,4 +30,10 @@ def get_pi(pi_name_slug):
     try:
         return PuntoInteresse.objects.get(slug=pi_name_slug)
     except PuntoInteresse.DoesNotExist:
+        return None
+
+def get_val(pi):
+    try:
+        return ValidazionePunto.objects.get(punto=pi.id)
+    except ValidazionePunto.DoesNotExist:
         return None
