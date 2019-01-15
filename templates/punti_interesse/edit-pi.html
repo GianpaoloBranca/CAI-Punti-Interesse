@@ -1,6 +1,13 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
+{% load bootstrap4 %}
 
 {% block main %}
-Pagina per modificare il punto di interesse {{ punto.nome }}
+{% if form %}
+<div class="container">
+{% bootstrap_form form %}
+</div>
+{% else %}
+<p>Form mancante</p>
+{% endif %}
 {% endblock main %}
