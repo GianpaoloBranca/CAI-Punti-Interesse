@@ -26,7 +26,7 @@ def edit_pi(request, pi_name_slug):
     punto = get_pi(pi_name_slug)
 
     if request.method == 'POST':
-        form = PuntoInteresseForm(request.POST, instance=punto)
+        form = PuntoInteresseForm(request.POST, files=request.FILES, instance=punto)
 
         if form.is_valid():
             form.save(commit=True)

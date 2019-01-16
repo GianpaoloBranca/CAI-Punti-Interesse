@@ -25,5 +25,8 @@ class PuntoInteresseForm(forms.ModelForm):
             'descr_breve',
             'descr_estesa',
             'descr_sito',
-            'motivo'
+            'motivo',
+            'rif_biblio',
+            'rif_sito',
+            'foto_copertina',
         ]

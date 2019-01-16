@@ -17,7 +17,7 @@
   {% endif %}
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
-      <img class="img-fluid rounded" src="{% static 'images/placeholder.jpg' %}" alt="Immagine non trovata">
+      <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
       <div class="row m-0 py-2 px-1 mt-2 rounded" style="background-color:#e1e8f0">
         <div class="col px-1">
           <img class="img-gallery rounded" src="{% static 'images/p1.jpg' %}" alt="Immagine non trovata">
@@ -79,9 +79,9 @@
         <dt class="col-sm-5">Motivo della fruizione</dt>
         <dd class="col-sm-7">{{ punto.motivo }}</dd>
         <dt class="col-sm-5">Riferimenti bibliografici</dt>
-        <dd class="col-sm-7">_biblio</dd>
+        <dd class="col-sm-7">{{ punto.rif_biblio }}</dd>
         <dt class="col-sm-5">Riferimenti sitografici</dt>
-        <dd class="col-sm-7">_sito</dd>
+        <dd class="col-sm-7">{{ punto.rif_sito }}</dd>
       </dl>
     </div>
   </div>

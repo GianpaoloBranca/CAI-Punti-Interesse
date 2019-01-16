@@ -5,11 +5,11 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  {{ punto.slug }}
-  <form id="pi-form" method="POST" action="/pi/ril/{{ punto.slug }}/edit/">
+  <form id="pi-form" method="POST" enctype="multipart/form-data" action="/pi/ril/{{ punto.slug }}/edit/">
   {% bootstrap_form form %}
   {% csrf_token %}
-  {% buttons submit='OK' reset="Cancel" %}{% endbuttons %}
+  {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
+  {% bootstrap_button "Reset" button_type="reset" button_class="btn-primary" %}
   </form>
 </div>
 {% else %}

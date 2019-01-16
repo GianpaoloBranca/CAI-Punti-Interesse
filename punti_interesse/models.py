@@ -20,19 +20,19 @@ class PuntoInteresse(models.Model):
     periodo = models.CharField(verbose_name='Periodo di visita consigliato', max_length=256)
     istituto = models.CharField(verbose_name='Istituto di tutela', max_length=128)
 
-    #foto copertina (max 1)
-    #foto accessorie (max 5)
+    foto_copertina = models.ImageField(verbose_name='Foto copertina', upload_to='foto_copertina/', null=True, blank=True)
 
     descr_breve = models.TextField(verbose_name='Descrizione oggetto breve', max_length=256)
-    descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024)
-    descr_sito = models.TextField(verbose_name='Descrizione sito', max_length=256)
+    descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024, blank=True)
+    descr_sito = models.TextField(verbose_name='Descrizione sito', max_length=256, blank=True)
 
     #stato di conservazione
 
-    motivo = models.TextField(verbose_name='Motivo per la fruizione', max_length=256)
+    motivo = models.TextField(verbose_name='Motivo per la fruizione', max_length=256, blank=True)
 
-    #riferimenti bibiliografici
-    #riferimenti sitografici
+    rif_biblio = models.TextField(verbose_name='Riferimenti bibliografici', max_length=256, blank=True)
+    rif_sito = models.TextField(verbose_name='Riferimenti sitografici', max_length=256, blank=True)
+
     #rilevatore (utente)
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
@@ -115,3 +115,14 @@ class EstensioneInteresse(models.Model):
 
     def __str__(self):
         return self.descrizione
+
+class FotoAccessoria(models.Model):
+    punto = models.ForeignKey(PuntoInteresse, on_delete=models.CASCADE)
+    foto = models.ImageField(verbose_name='Foto', upload_to='foto_accessorie/')
+
+    class Meta:
+        verbose_name = 'Foto Accessoria'
+        verbose_name_plural = 'Foto Accessorie'
+
+    def __str__(self):
+        return str(self.punto)
