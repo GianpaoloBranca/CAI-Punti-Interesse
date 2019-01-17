@@ -19,19 +19,16 @@
     <div class="col-md-6 order-2 order-md-1">
       <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
       <div class="row m-0 py-2 px-1 mt-2 rounded" style="background-color:#e1e8f0">
-        <div class="col px-1">
-          <img class="img-gallery rounded" src="{% static 'images/p1.jpg' %}" alt="Immagine non trovata">
+        <div class="col-2 px-1">
+          <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
         </div>
-        <div class="col px-1">
-          <img class="img-gallery rounded" src="{% static 'images/p2.jpg' %}" alt="Immagine non trovata">
-        </div>
-        <div class="col px-1">
-          <img class="img-gallery rounded" src="{% static 'images/p3.jpg' %}" alt="Immagine non trovata">
-        </div>
-        <div class="col px-1">
-        </div>
-        <div class="col px-1">
-        </div>
+        {% if fotos %}
+          {% for foto in fotos %}
+          <div class="col-2 px-1">
+            <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ foto.foto }}" alt="Immagine non trovata">
+          </div>
+          {% endfor %}
+        {% endif %}
       </div>
       <h3 class="pt-2">Descrizione estesa</h3>
       <p class="text-justify">{{ punto.descr_estesa }}</p>

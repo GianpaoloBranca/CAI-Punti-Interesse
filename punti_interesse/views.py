@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from punti_interesse.models import PuntoInteresse, ValidazionePunto
+from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
 from punti_interesse.forms import PuntoInteresseForm
 
 def index(request):
@@ -19,6 +19,7 @@ def show_pi_ril(request, pi_name_slug):
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['val'] = get_val(punto)
+    context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
     return render(request, 'punti_interesse/pi.html', context_dict)
 
 def edit_pi(request, pi_name_slug):
