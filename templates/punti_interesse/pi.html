@@ -3,6 +3,8 @@
 
 {% block links %}
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href = "{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
+  <link rel="stylesheet" href="{% static 'stylesheet.css' %}">
 {% endblock links %}
 
 
@@ -20,12 +22,16 @@
       <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
       <div class="row m-0 py-2 px-1 mt-2 rounded" style="background-color:#e1e8f0">
         <div class="col-2 px-1">
-          <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
+          <a href="{{ MEDIA_URL }}{{ punto.foto_copertina }}" data-toggle="lightbox" data-gallery="example-gallery">
+            <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
+          </a>
         </div>
         {% if fotos %}
           {% for foto in fotos %}
           <div class="col-2 px-1">
-            <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ foto.foto }}" alt="Immagine non trovata">
+            <a href="{{ MEDIA_URL }}{{ foto.foto }}" data-toggle="lightbox" data-gallery="example-gallery">
+              <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ foto.foto }}" alt="Immagine non trovata">
+            </a>
           </div>
           {% endfor %}
         {% endif %}
@@ -118,3 +124,14 @@ Errore! Punto di intersse mancante.
 {% endif %}
 
 {% endblock main %}
+
+
+{% block script %}
+<script src="{% static 'third-party/ekko-lightbox/ekko-lightbox.min.js' %}"></script>
+<script>
+$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
+</script>
+{% endblock script %}
