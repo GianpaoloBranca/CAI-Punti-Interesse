@@ -8,8 +8,9 @@
   <form id="pi-form" method="POST" enctype="multipart/form-data" action="/pi/ril/{{ punto.slug }}/edit/">
   {% bootstrap_form form %}
   {{ fotoformset.management_form }}
+  <hr>
+  <h4> Foto aggiuntive: </h4>
   {% for fotoform in fotoformset %}
-    <hr>
     {% bootstrap_form fotoform %}
   {% endfor %}
   {% csrf_token %}
