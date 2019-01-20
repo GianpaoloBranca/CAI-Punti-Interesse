@@ -1,6 +1,7 @@
 from django.shortcuts import render
+from django.forms import modelformset_factory
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
-from punti_interesse.forms import PuntoInteresseForm
+from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm
 
 def index(request):
     return render(request, 'punti_interesse/index.html')
@@ -25,18 +26,40 @@ def show_pi_ril(request, pi_name_slug):
 def edit_pi(request, pi_name_slug):
 
     punto = get_pi(pi_name_slug)
+    fotos = FotoAccessoria.objects.filter(punto=punto.id)
+
+    FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5, can_delete=True)
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES, instance=punto)
 
-        if form.is_valid():
-            form.save(commit=True)
-            return show_pi_ril(request, pi_name_slug)
+        fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=fotos)
 
+        if form.is_valid() and fotoformset.is_valid():
+            form.save(commit=True)
+            # TODO hack
+            for fotoform in fotoformset.cleaned_data:
+                if fotoform:
+                    foto = fotoform['foto']
+                    if fotoform['id']:
+                        foto_acc = FotoAccessoria.objects.get(id=fotoform['id'].id)
+                        foto_acc.punto = punto
+                        foto_acc.foto = foto
+                    else:
+                        foto_acc = FotoAccessoria(foto=foto, punto=punto)
+
+                    if fotoform['DELETE']:
+                        foto_acc.delete()
+                    else:
+                        foto_acc.save()
+
+            return show_pi_ril(request, pi_name_slug)
 
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['form'] = PuntoInteresseForm(instance=punto)
+    # Il linter da un errore inesistente in questa riga
+    context_dict['fotoformset'] = FotoFormSet(queryset=fotos)
     return render(request, 'punti_interesse/edit-pi.html', context_dict)
 
 #______________________________________________________________________________

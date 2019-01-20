@@ -1,5 +1,5 @@
 from django import forms
-from punti_interesse.models import PuntoInteresse
+from punti_interesse.models import PuntoInteresse, FotoAccessoria
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -29,4 +29,12 @@ class PuntoInteresseForm(forms.ModelForm):
             'rif_biblio',
             'rif_sito',
             'foto_copertina',
+        ]
+
+class FotoAccessoriaForm(forms.ModelForm):
+
+    class Meta:
+        model = FotoAccessoria
+        fields = [
+            'foto',
         ]
