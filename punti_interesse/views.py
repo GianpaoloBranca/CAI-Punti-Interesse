@@ -23,6 +23,31 @@ def show_pi_ril(request, pi_name_slug):
     context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
     return render(request, 'punti_interesse/pi.html', context_dict)
 
+def nuovo(request):
+
+    FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5)
+
+    if request.method == 'POST':
+        form = PuntoInteresseForm(request.POST, files=request.FILES)
+        fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=FotoAccessoria.objects.none())
+
+        if form.is_valid() and fotoformset.is_valid():
+            form.save(commit=True)
+            punto = PuntoInteresse.objects.get(nome=form.cleaned_data['nome'])
+
+            for fotoform in fotoformset.cleaned_data:
+                if fotoform:
+                    foto = fotoform['foto']
+                    foto_acc = FotoAccessoria(foto=foto, punto=punto)
+                    foto_acc.save()
+
+            return show_pi_ril(request, punto.slug)
+
+    context_dict = {}
+    context_dict['form'] = PuntoInteresseForm()
+    context_dict['fotoformset'] = FotoFormSet(queryset=FotoAccessoria.objects.none())
+    return render(request, 'punti_interesse/nuovo.html', context_dict)
+
 def edit_pi(request, pi_name_slug):
 
     punto = get_pi(pi_name_slug)

@@ -1,0 +1,24 @@
+{% extends 'punti_interesse/base.html' %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+
+{% block main %}
+{% if form %}
+<div class="container">
+  <form id="pi-form" method="POST" enctype="multipart/form-data" action="/pi/ril/nuovo/">
+  {% bootstrap_form form %}
+  {{ fotoformset.management_form }}
+  <hr>
+  <h4> Foto aggiuntive: </h4>
+  {% for fotoform in fotoformset %}
+    {% bootstrap_form fotoform %}
+  {% endfor %}
+  {% csrf_token %}
+  {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
+  {% bootstrap_button "Reset" button_type="reset" button_class="btn-primary" %}
+  </form>
+</div>
+{% else %}
+<p>Form mancante</p>
+{% endif %}
+{% endblock main %}
