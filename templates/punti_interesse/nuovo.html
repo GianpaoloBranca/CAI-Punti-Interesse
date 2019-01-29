@@ -5,14 +5,14 @@
 {% block main %}
 {% if form %}
 <div class="container">
+  <h3>Crea nuovo punto di interesse</h3>
+  <hr>
   <form id="pi-form" method="POST" enctype="multipart/form-data" action="/pi/ril/nuovo/">
-  {% bootstrap_form form %}
+  {% bootstrap_form form layout='horizontal' size='small' %}
   {{ fotoformset.management_form }}
   <hr>
   <h4> Foto aggiuntive: </h4>
-  {% for fotoform in fotoformset %}
-    {% bootstrap_form fotoform %}
-  {% endfor %}
+  {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
   {% csrf_token %}
   {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
   {% bootstrap_button "Reset" button_type="reset" button_class="btn-primary" %}

@@ -34,19 +34,17 @@ def nuovo(request):
         if form.is_valid() and fotoformset.is_valid():
             form.save(commit=True)
             punto = PuntoInteresse.objects.get(nome=form.cleaned_data['nome'])
-
-            for fotoform in fotoformset.cleaned_data:
-                if fotoform:
-                    foto = fotoform['foto']
-                    foto_acc = FotoAccessoria(foto=foto, punto=punto)
-                    foto_acc.save()
-
+            save_fotos(fotoformset, punto)
             return show_pi_ril(request, punto.slug)
 
+    else:
+        form = PuntoInteresseForm()
+        fotoformset = FotoFormSet(queryset=FotoAccessoria.objects.none())
+
     context_dict = {}
-    context_dict['form'] = PuntoInteresseForm()
-    context_dict['fotoformset'] = FotoFormSet(queryset=FotoAccessoria.objects.none())
-    return render(request, 'punti_interesse/nuovo.html', context_dict)
+    context_dict['form'] = form
+    context_dict['fotoformset'] = fotoformset
+    return render(request, 'punti_interesse/nuovo.html', {'form' : form, 'fotoformset' : fotoformset})
 
 def edit_pi(request, pi_name_slug):
 
@@ -57,34 +55,20 @@ def edit_pi(request, pi_name_slug):
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES, instance=punto)
-
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=fotos)
 
         if form.is_valid() and fotoformset.is_valid():
             form.save(commit=True)
-            # TODO hack
-            for fotoform in fotoformset.cleaned_data:
-                if fotoform:
-                    foto = fotoform['foto']
-                    if fotoform['id']:
-                        foto_acc = FotoAccessoria.objects.get(id=fotoform['id'].id)
-                        foto_acc.punto = punto
-                        foto_acc.foto = foto
-                    else:
-                        foto_acc = FotoAccessoria(foto=foto, punto=punto)
-
-                    if fotoform['DELETE']:
-                        foto_acc.delete()
-                    else:
-                        foto_acc.save()
-
-            return show_pi_ril(request, pi_name_slug)
+            save_fotos(fotoformset, punto)
+            return show_pi_ril(request, punto.slug)
+    else:
+        form = PuntoInteresseForm()
+        fotoformset = FotoFormSet(queryset=fotos)
 
     context_dict = {}
     context_dict['punto'] = punto
-    context_dict['form'] = PuntoInteresseForm(instance=punto)
-    # Il linter da un errore inesistente in questa riga
-    context_dict['fotoformset'] = FotoFormSet(queryset=fotos)
+    context_dict['form'] = form
+    context_dict['fotoformset'] = fotoformset
     return render(request, 'punti_interesse/edit-pi.html', context_dict)
 
 #______________________________________________________________________________
@@ -100,3 +84,20 @@ def get_val(pi):
         return ValidazionePunto.objects.get(punto=pi.id)
     except ValidazionePunto.DoesNotExist:
         return None
+
+# TODO hack
+def save_fotos(fotoformset, punto):
+    for fotoform in fotoformset.cleaned_data:
+        if fotoform:
+            foto = fotoform['foto']
+            if fotoform['id']:
+                foto_acc = FotoAccessoria.objects.get(id=fotoform['id'].id)
+                foto_acc.punto = punto
+                foto_acc.foto = foto
+            else:
+                foto_acc = FotoAccessoria(foto=foto, punto=punto)
+
+            if fotoform['DELETE']:
+                foto_acc.delete()
+            else:
+                foto_acc.save()

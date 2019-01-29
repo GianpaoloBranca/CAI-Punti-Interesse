@@ -8,11 +8,11 @@ class PuntoInteresseForm(forms.ModelForm):
     class Meta:
         model = PuntoInteresse
         fields = [
-            'longitudine',
-            'latitudine',
+            'nome',
             'categoria',
             'tipo',
-            'nome',
+            'longitudine',
+            'latitudine',
             'localita',
             'valle',
             'qualita',
