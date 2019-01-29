@@ -1,52 +1,76 @@
 from django.shortcuts import render
 from django.forms import modelformset_factory
+from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm
 
-def index(request):
-    return render(request, 'punti_interesse/index.html')
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
 
-def rilevatore(request):
+        if user and user.is_active:
+            dj_login(request, user)
+            return HttpResponseRedirect(reverse('home'))
+
+        else:
+            # Bad login details were provided. So we can't log the user in.
+            print("Invalid login details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
+
+    return render(request, 'punti_interesse/login.html')
+
+@login_required
+def logout(request):
+    dj_logout(request)
+    return HttpResponseRedirect(reverse('login'))
+
+@login_required
+def home(request):
     lista_punti = PuntoInteresse.objects.order_by('data')
-    return render(request, 'punti_interesse/rilevatore.html', {'punti': lista_punti})
+    return render(request, 'punti_interesse/home.html', {'punti': lista_punti})
 
-def validatore(request):
-    # TODO è solo una copia della pagina del rilevatore al momento
-    lista_punti = PuntoInteresse.objects.order_by('data')
-    return render(request, 'punti_interesse/validatore.html', {'punti': lista_punti})
-
-def show_pi_ril(request, pi_name_slug):
+@login_required
+def show(request, pi_name_slug):
     punto = get_pi(pi_name_slug)
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['val'] = get_val(punto)
     context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
-    return render(request, 'punti_interesse/pi.html', context_dict)
+    return render(request, 'punti_interesse/show.html', context_dict)
 
-def nuovo(request):
+@login_required
+def new(request):
 
     FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5)
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES)
+        # pylint: disable=E1123
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=FotoAccessoria.objects.none())
 
         if form.is_valid() and fotoformset.is_valid():
             form.save(commit=True)
             punto = PuntoInteresse.objects.get(nome=form.cleaned_data['nome'])
             save_fotos(fotoformset, punto)
-            return show_pi_ril(request, punto.slug)
+            return show(request, punto.slug)
 
     else:
         form = PuntoInteresseForm()
+        # pylint: disable=E1123
         fotoformset = FotoFormSet(queryset=FotoAccessoria.objects.none())
 
     context_dict = {}
     context_dict['form'] = form
     context_dict['fotoformset'] = fotoformset
-    return render(request, 'punti_interesse/nuovo.html', {'form' : form, 'fotoformset' : fotoformset})
+    return render(request, 'punti_interesse/new.html', {'form' : form, 'fotoformset' : fotoformset})
 
-def edit_pi(request, pi_name_slug):
+@login_required
+def edit(request, pi_name_slug):
 
     punto = get_pi(pi_name_slug)
     fotos = FotoAccessoria.objects.filter(punto=punto.id)
@@ -55,33 +79,35 @@ def edit_pi(request, pi_name_slug):
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES, instance=punto)
+        # pylint: disable=E1123
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=fotos)
 
         if form.is_valid() and fotoformset.is_valid():
             form.save(commit=True)
             save_fotos(fotoformset, punto)
-            return show_pi_ril(request, punto.slug)
+            return show(request, punto.slug)
     else:
         form = PuntoInteresseForm()
+        # pylint: disable=E1123
         fotoformset = FotoFormSet(queryset=fotos)
 
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['form'] = form
     context_dict['fotoformset'] = fotoformset
-    return render(request, 'punti_interesse/edit-pi.html', context_dict)
+    return render(request, 'punti_interesse/edit.html', context_dict)
 
 #______________________________________________________________________________
 
-def get_pi(pi_name_slug):
+def get_pi(slug):
     try:
-        return PuntoInteresse.objects.get(slug=pi_name_slug)
+        return PuntoInteresse.objects.get(slug=slug)
     except PuntoInteresse.DoesNotExist:
         return None
 
-def get_val(pi):
+def get_val(punto):
     try:
-        return ValidazionePunto.objects.get(punto=pi.id)
+        return ValidazionePunto.objects.get(punto=punto.id)
     except ValidazionePunto.DoesNotExist:
         return None
 

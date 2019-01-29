@@ -2,10 +2,10 @@ from django.conf.urls import url
 from punti_interesse import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^ril/$', views.rilevatore, name='rilevatore'),
-    url(r'^val/$', views.validatore, name='validatore'),
-    url(r'^ril/nuovo/$', views.nuovo, name='nuovo'),
-    url(r'^ril/(?P<pi_name_slug>[\w\-]+)/$', views.show_pi_ril, name='show_pi_ril'),
-    url(r'^ril/(?P<pi_name_slug>[\w\-]+)/edit', views.edit_pi, name='edit_pi'),
+    url(r'^$', views.home, name='home'),
+    url(r'^login/$', views.login, name='login'),
+    url(r'^logout/$', views.logout, name='logout'),
+    url(r'^nuovo/$', views.new, name='new'),
+    url(r'^(?P<pi_name_slug>[\w\-]+)/$', views.show, name='show'),
+    url(r'^(?P<pi_name_slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
 ]

@@ -11,6 +11,7 @@
     <!-- FontAwesome CSS-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="icon" href="{% static 'images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'stylesheet.css' %}">
     {% block links %}
 
     {% endblock links %}
@@ -26,12 +27,12 @@
       <!-- BEGIN Navbar sections and links -->
       <ul class="nav navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link text-light" href="/pi/ril/">PUNTI DI INTERESSE</a>
+          <a class="nav-link text-light" href="{% url 'home' %}">PUNTI DI INTERESSE</a>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right pr-3">
         <li class="nav-item">
-          <a class="nav-link text-light" href="/pi/"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </li>
       </ul>
       <!-- END Navbar sections and links -->

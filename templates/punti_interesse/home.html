@@ -6,7 +6,7 @@
     <div class="col-md-12">
       <span class="h3 pl-3">Tutti i punti di interesse:</span>
       <div class="float-right pr-3">
-        <a class="btn btn-primary btn-sm" href="/pi/ril/nuovo/"><i class="fas fa-plus"></i> Nuovo</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
       </div>
       <ul class="p-3">
       {% if punti %}
@@ -22,7 +22,7 @@
         <tbody>
           {% for punto in punti %}
           <tr>
-          <td><a href="/pi/ril/{{punto.slug}}">{{ punto.nome }}</a></td>
+          <td><a href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
           <td>{{ punto.categoria }}</td>
           <td>{{ punto.tipo }}</td>
           <td>{{ punto.data }}</td>

@@ -3,7 +3,6 @@
 
 {% block links %}
   <link rel="stylesheet" href = "{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
-  <link rel="stylesheet" href="{% static 'stylesheet.css' %}">
 {% endblock links %}
 
 
@@ -42,7 +41,7 @@
     </div>
     <div class="col-md-6 order-1 order-md-2">
       <span class="h1">{{ punto.nome }}</span>
-      <div class="float-right pt-2"><a class="btn btn-primary btn-sm" href="/pi/ril/{{ punto.slug }}/edit">modifica</a></div><br>
+      <div class="float-right pt-2"><a class="btn btn-primary btn-sm" href="{% url 'edit' punto.slug %}">modifica</a></div><br>
       {{ punto.categoria }} -
       {{ punto.tipo }} <br>
       <hr>
