@@ -54,8 +54,9 @@ class PuntoInteresse(models.Model):
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
 
+    # TODO set as foreign key (maybe?)
     validatore = models.CharField(verbose_name='Nome validatore', max_length=128) # dalla piattaforma del CAI
-    descrizione = models.CharField(verbose_name='Descrizione', max_length=256)
+    descrizione = models.TextField(verbose_name='Descrizione', max_length=256)
 
     data = models.DateField(verbose_name='Data validazione', auto_now=True)
     data_aggiornamento = models.DateField(verbose_name='Data aggiornamento', auto_now=True)

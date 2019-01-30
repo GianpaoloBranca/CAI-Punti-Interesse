@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from punti_interesse.models import PuntoInteresse, FotoAccessoria
+from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -36,12 +36,24 @@ class FotoAccessoriaForm(forms.ModelForm):
 
     class Meta:
         model = FotoAccessoria
+        fields = ('foto',)
+
+class ValidazioneForm(forms.ModelForm):
+    data = forms.DateField(widget=forms.HiddenInput(), required=False)
+    data_aggiornamento = forms.DateField(widget=forms.HiddenInput(), required=False)
+
+    class Meta:
+        model = ValidazionePunto
         fields = [
-            'foto',
+            'regione',
+            'comunita_montana',
+            'gruppo_montuoso',
+            'quota',
+            'descrizione',
         ]
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password',)

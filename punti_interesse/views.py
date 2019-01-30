@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
-from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm
+from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 
 def login(request):
     if request.method == 'POST':
@@ -99,7 +99,23 @@ def edit(request, slug):
 
 @login_required
 def validate(request, slug):
-    return render(request, 'punti_interesse/validate.html')
+    punto = get_pi(slug)
+
+    if request.method == 'POST':
+        form = ValidazioneForm(request.POST)
+        if form.is_valid():
+            val = form.save(commit=False)
+            val.punto = punto
+            val.validatore = request.user.username
+            val.save()
+            return show(request, slug)
+    else:
+        form = ValidazioneForm()
+
+    context_dict = {}
+    context_dict['punto'] = punto
+    context_dict['form'] = form
+    return render(request, 'punti_interesse/validate.html', context_dict)
 
 #______________________________________________________________________________
 
