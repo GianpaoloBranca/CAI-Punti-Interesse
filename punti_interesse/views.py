@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
+from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 
 def login(request):
     if request.method == 'POST':
@@ -44,6 +45,7 @@ def show(request, slug):
     return render(request, 'punti_interesse/show.html', context_dict)
 
 @login_required
+@user_passes_test(is_rilevatore)
 def new(request):
 
     FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5)
@@ -70,6 +72,7 @@ def new(request):
     return render(request, 'punti_interesse/new.html', {'form' : form, 'fotoformset' : fotoformset})
 
 @login_required
+@user_passes_test(is_rilevatore)
 def edit(request, slug):
 
     punto = get_pi(slug)
@@ -98,6 +101,7 @@ def edit(request, slug):
     return render(request, 'punti_interesse/edit.html', context_dict)
 
 @login_required
+@user_passes_test(is_validatore)
 def validate(request, slug):
     punto = get_pi(slug)
 
