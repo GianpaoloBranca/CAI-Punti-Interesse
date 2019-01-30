@@ -4,36 +4,36 @@
 <main role="main" class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <span class="h3 pl-3">Tutti i punti di interesse:</span>
+      <span class="h3 pl-3">Benvenuto {{ user.username }}</span>
       <div class="float-right pr-3">
         <a class="btn btn-primary btn-sm" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
       </div>
-      <ul class="p-3">
       {% if punti %}
-        <table class="table table-sm table-bordered">
-        <thead class="thead-light">
-          <tr>
-          <th scope="col" style="width: 30%">Nome</th>
-          <th scope="col" style="width: 30%">Categoria</th>
-          <th scope="col" style="width: 20%">Tipo</th>
-          <th scope="col" style="width: 20%">Data Inserimento</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for punto in punti %}
-          <tr>
-          <td><a href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
-          <td>{{ punto.categoria }}</td>
-          <td>{{ punto.tipo }}</td>
-          <td>{{ punto.data }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-        </table>
+      <div class="p-3">
+      <table class="table table-sm table-bordered">
+      <thead class="thead-light">
+        <tr>
+        <th scope="col" style="width: 30%">Nome</th>
+        <th scope="col" style="width: 30%">Categoria</th>
+        <th scope="col" style="width: 20%">Tipo</th>
+        <th scope="col" style="width: 20%">Data Inserimento</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for punto in punti %}
+        <tr>
+        <td><a href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
+        <td>{{ punto.categoria }}</td>
+        <td>{{ punto.tipo }}</td>
+        <td>{{ punto.data }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      </div>
       {% else %}
-      <li>Errore! Nessun punto di interesse disponibile</li>
+      Errore! Nessun punto di interesse disponibile
       {% endif %}
-      </ul>
     </div>
   </div>
 </main>

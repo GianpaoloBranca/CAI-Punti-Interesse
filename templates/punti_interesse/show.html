@@ -1,5 +1,6 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
+{% load pi_template_tags %}
 
 {% block links %}
   <link rel="stylesheet" href = "{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
@@ -41,7 +42,17 @@
     </div>
     <div class="col-md-6 order-1 order-md-2">
       <span class="h1">{{ punto.nome }}</span>
-      <div class="float-right pt-2"><a class="btn btn-primary btn-sm" href="{% url 'edit' punto.slug %}">modifica</a></div><br>
+      {% if user|is_rilevatore %}
+        <div class="float-right pt-2">
+          <a class="btn btn-primary btn-sm" href="{% url 'edit' punto.slug %}">Modifica</a>
+        </div>
+      {% endif %}
+      {% if user|is_validatore and not val %}
+        <div class="float-right pt-2">
+          <a class="btn btn-primary btn-sm" href="{% url 'validate' punto.slug %}">Valida</a>
+        </div>
+      {% endif %}
+      <br>
       {{ punto.categoria }} -
       {{ punto.tipo }} <br>
       <hr>

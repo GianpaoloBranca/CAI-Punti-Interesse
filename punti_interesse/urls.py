@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^nuovo/$', views.new, name='new'),
-    url(r'^(?P<pi_name_slug>[\w\-]+)/$', views.show, name='show'),
-    url(r'^(?P<pi_name_slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
+    url(r'^(?P<slug>[\w\-]+)/$', views.show, name='show'),
+    url(r'^(?P<slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
+    url(r'^(?P<slug>[\w\-]+)/valida/$', views.validate, name='validate'),
 ]

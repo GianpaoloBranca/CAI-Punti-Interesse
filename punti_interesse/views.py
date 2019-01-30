@@ -35,8 +35,8 @@ def home(request):
     return render(request, 'punti_interesse/home.html', {'punti': lista_punti})
 
 @login_required
-def show(request, pi_name_slug):
-    punto = get_pi(pi_name_slug)
+def show(request, slug):
+    punto = get_pi(slug)
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['val'] = get_val(punto)
@@ -70,9 +70,9 @@ def new(request):
     return render(request, 'punti_interesse/new.html', {'form' : form, 'fotoformset' : fotoformset})
 
 @login_required
-def edit(request, pi_name_slug):
+def edit(request, slug):
 
-    punto = get_pi(pi_name_slug)
+    punto = get_pi(slug)
     fotos = FotoAccessoria.objects.filter(punto=punto.id)
 
     FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5, can_delete=True)
@@ -87,7 +87,7 @@ def edit(request, pi_name_slug):
             save_fotos(fotoformset, punto)
             return show(request, punto.slug)
     else:
-        form = PuntoInteresseForm()
+        form = PuntoInteresseForm(instance=punto)
         # pylint: disable=E1123
         fotoformset = FotoFormSet(queryset=fotos)
 
@@ -96,6 +96,10 @@ def edit(request, pi_name_slug):
     context_dict['form'] = form
     context_dict['fotoformset'] = fotoformset
     return render(request, 'punti_interesse/edit.html', context_dict)
+
+@login_required
+def validate(request, slug):
+    return render(request, 'punti_interesse/validate.html')
 
 #______________________________________________________________________________
 
