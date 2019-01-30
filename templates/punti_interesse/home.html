@@ -24,7 +24,11 @@
       </thead>
       <tbody>
       {% for punto in punti %}
-        <tr>
+        {% if punto.validato %}
+          <tr>
+        {% else %}
+          <tr class="table-warning">
+        {% endif %}
         <td><a href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
         <td>{{ punto.categoria }}</td>
         <td>{{ punto.tipo }}</td>

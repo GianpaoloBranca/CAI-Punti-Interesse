@@ -36,11 +36,12 @@ class PuntoInteresse(models.Model):
     #rilevatore (utente)
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
-
+    validato = models.BooleanField(verbose_name='Validato', default=False)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)
+        self.validato = False
         super(PuntoInteresse, self).save(*args, **kwargs)
 
     class Meta:
