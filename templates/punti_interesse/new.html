@@ -1,6 +1,7 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
 {% load bootstrap4 %}
+{% load pi_template_tags %}
 
 {% block main %}
 {% if form %}
@@ -20,11 +21,12 @@
   <h4> Foto aggiuntive: </h4>
   {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
   {% csrf_token %}
-  {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
-  {% bootstrap_button "Reset" button_type="reset" button_class="btn-primary" %}
   </form>
 </div>
 {% else %}
 <p>Form mancante</p>
 {% endif %}
+
+{% btn_scroll_top %}
+
 {% endblock main %}
