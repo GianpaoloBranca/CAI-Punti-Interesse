@@ -86,7 +86,9 @@ def edit(request, slug):
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=fotos)
 
         if form.is_valid() and fotoformset.is_valid():
-            form.save(commit=True)
+            punto = form.save(commit=False)
+            punto.validato = False
+            punto.save()
             save_fotos(fotoformset, punto)
             return show(request, punto.slug)
     else:
@@ -104,17 +106,20 @@ def edit(request, slug):
 @user_passes_test(is_validatore)
 def validate(request, slug):
     punto = get_pi(slug)
+    val = get_val(punto)
 
     if request.method == 'POST':
-        form = ValidazioneForm(request.POST)
+        form = ValidazioneForm(request.POST, instance=val)
         if form.is_valid():
             val = form.save(commit=False)
             val.punto = punto
             val.validatore = request.user.username
             val.save()
+            punto.validato = True
+            punto.save()
             return show(request, slug)
     else:
-        form = ValidazioneForm()
+        form = ValidazioneForm(instance=val)
 
     context_dict = {}
     context_dict['punto'] = punto

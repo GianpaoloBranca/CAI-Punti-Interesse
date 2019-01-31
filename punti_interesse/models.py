@@ -41,7 +41,6 @@ class PuntoInteresse(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)
-        self.validato = False
         super(PuntoInteresse, self).save(*args, **kwargs)
 
     class Meta:

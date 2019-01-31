@@ -2,17 +2,17 @@
 {% load pi_template_tags %}
 {% block main %}
 
-<main role="main" class="container-fluid">
+<main role="main" class="container">
   <div class="row">
     <div class="col-md-12">
-      <span class="h3 pl-3">Benvenuto {{ user.username }}</span>
+      <span class="h3">Benvenuto {{ user.username }}</span>
       {% if  user|is_rilevatore %}
-      <div class="float-right pr-3">
+      <div class="float-right">
         <a class="btn btn-primary btn-sm" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
       </div>
       {% endif %}
+      <hr>
       {% if punti %}
-      <div class="p-3">
       <table class="table table-sm table-bordered">
       <thead class="thead-light">
         <tr>
@@ -37,7 +37,6 @@
       {% endfor %}
       </tbody>
       </table>
-      </div>
       {% else %}
       Errore! Nessun punto di interesse disponibile
       {% endif %}
