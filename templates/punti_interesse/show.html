@@ -13,11 +13,11 @@
 <main role="main" class="container">
   {% if not punto.validato %}
     {% if val %}
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-info" role="alert">
       <i class="fas fa-exclamation-triangle"></i> La validazione di questo punto di interesse è scaduta
     </div>
     {% else %}
-    <div class="alert alert-warning" role="alert">
+    <div class="alert alert-info" role="alert">
       <i class="fas fa-exclamation-triangle"></i> Questo punto di interesse non è ancora stato validato
     </div>
     {% endif %}
@@ -50,12 +50,12 @@
       <span class="h1">{{ punto.nome }}</span>
       {% if user|is_rilevatore %}
         <div class="float-right pt-2">
-          <a class="btn btn-primary btn-sm" href="{% url 'edit' punto.slug %}">Modifica</a>
+          <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">Modifica</a>
         </div>
       {% endif %}
       {% if user|is_validatore and not punto.validato %}
         <div class="float-right pt-2">
-          <a class="btn btn-primary btn-sm" href="{% url 'validate' punto.slug %}">Valida</a>
+          <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">Valida</a>
         </div>
       {% endif %}
       <br>
@@ -106,7 +106,7 @@
   {% if val %}
   <div class="row">
     <div class="col-md-12 pt-2 rounded" style="background-color:#e1e8f0">
-      <h2>Validazione</h2>
+      <h2>Validazione {% if not punto.validato %}(scaduta){% endif %}</h2>
       <div class="row">
         <div class="col-md-6">
           <p class="text-justify">{{ val.descrizione }}</p>
@@ -125,14 +125,13 @@
         </div>
       </div>
       <p><i>
-        Eseguita da <b>{{ val.validatore }}</b> il <b>{{ val.data }}.</b><br>
-        Ultimo Aggiornamento:<b>{{ val.data_aggiornamento }}</b>
+        Validazione eseguita da <b>{{ val.validatore }}</b>. Aggiornata al<b> {{ val.data_aggiornamento }}</b>
       </i></p>
     </div>
   </div>
   {% endif %}
   <br>
-  <p><i>Punto di interesse rilevato da</i><b> _Pino</b> il <b>{{ punto.data }}</b><p>
+  <p><i>Punto di interesse rilevato da<b> _Pino</b>. Aggiornato al <b>{{ punto.data }}</b></i></p>
 </main>
 {% else %}
 Errore! Punto di intersse mancante.

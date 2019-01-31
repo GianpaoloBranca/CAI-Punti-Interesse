@@ -22,7 +22,7 @@
   <body style='padding-top:80px'>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand mx-3" href="#">
-        <img src="{% static "images/logo_cai.png" %}" height="50" alt="">
+        <img src="{% static "images/logo_cai.png" %}" height="45" alt="">
       </a>
       <!-- BEGIN Navbar sections and links -->
       <ul class="nav navbar-nav mr-auto">
@@ -30,9 +30,14 @@
           <a class="nav-link text-light" href="{% url 'home' %}">UnicoCAI Punti di Interesse</a>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right pr-3">
+      <ul class="nav form-inline text-right pr-3">
+        {% if user %}
+        <li class="nav-item pr-3">
+          <span class="text-light"><i class="fas fa-user fa-fw"></i> {{ user.username }}</span>
+        </li>
+        {% endif %}
         <li class="nav-item">
-          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
         </li>
       </ul>
       <!-- END Navbar sections and links -->

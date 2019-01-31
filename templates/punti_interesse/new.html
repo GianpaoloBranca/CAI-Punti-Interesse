@@ -5,9 +5,15 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  <h3>Crea nuovo punto di interesse</h3>
-  <hr>
-  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'new' %}">
+  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'new' %}" onsubmit="return confirm('Salvare il Punto di Interesse?');"></form>
+  <div class="pb-4">
+    <span class="h3">Crea nuovo punto</span>
+    <div class="float-right"> 
+      {% bootstrap_button "Salva" button_type="submit" button_class="btn-primary" %}
+      {% bootstrap_button "Ripristina" button_type="reset" button_class="btn-secondary" %}
+      <a href="{% url 'home' %}" class="btn btn-secondary text-light">Annulla</a>
+    </div> 
+  </div>
   {% bootstrap_form form layout='horizontal' size='small' %}
   {{ fotoformset.management_form }}
   <hr>

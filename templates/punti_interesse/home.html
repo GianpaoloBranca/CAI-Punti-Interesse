@@ -5,21 +5,22 @@
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-12">
-      <span class="h3">Benvenuto {{ user.username }}</span>
-      {% if  user|is_rilevatore %}
-      <div class="float-right">
-        <a class="btn btn-primary btn-sm" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
-      </div>
-      {% endif %}
-      <hr>
+      <div class="row pb-3">
+        <div class="col">
+          <input class="form-control" style="width:350px" type="search" placeholder="Cerca">
+        </div>
+        <div class="col">
+          <a class="btn btn-primary float-right" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
+        </div>       
+      </div>      
       {% if punti %}
-      <table class="table table-sm table-bordered">
-      <thead class="thead-light">
+      <table class="table">
+      <thead>
         <tr>
         <th scope="col" style="width: 30%">Nome</th>
         <th scope="col" style="width: 30%">Categoria</th>
         <th scope="col" style="width: 20%">Tipo</th>
-        <th scope="col" style="width: 20%">Data Inserimento</th>
+        <th scope="col" style="width: 20%">Ultimo Aggiornamento</th>
         </tr>
       </thead>
       <tbody>
@@ -27,7 +28,7 @@
         {% if punto.validato %}
           <tr>
         {% else %}
-          <tr class="table-warning">
+          <tr class="table-info">
         {% endif %}
         <td><a href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
         <td>{{ punto.categoria }}</td>
