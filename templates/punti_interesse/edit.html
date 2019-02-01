@@ -6,17 +6,11 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}" 
+  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}"
     onsubmit="return confirm('Salvare il Punto di Interesse?\nATTENZIONE: l\'eventuale validazione presente sarà annullata.');">
   <div class="pb-4">
-    {% if punto %}
     <span class="h3">Modifica {{ punto.nome }}</span>
-    {% endif %}
-    <div class="float-right"> 
-      {% bootstrap_button "Salva" button_type="submit" button_class="btn-primary" %}
-      {% bootstrap_button "Ripristina" button_type="reset" button_class="btn-secondary" %}
-      <a href="{% url 'show' punto.slug %}" class="btn btn-info text-light">Annulla</a>
-    </div> 
+    {% form_buttons %}
   </div>
   {% bootstrap_form form layout='horizontal' size='small' %}
   {{ fotoformset.management_form }}

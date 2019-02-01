@@ -1,19 +1,16 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
 {% load bootstrap4 %}
+{% load pi_template_tags %}
 
 {% block main %}
 <div class="container">
 {% if form %}
-  <form id="val-form" method="POST" action="{% url 'validate' punto.slug %}">
+  <form id="val-form" method="POST" action="{% url 'validate' punto.slug %}" onsubmit="return confirm('Procedere con la Validazione?');">
   <div class="pb-4">
     <span class="h3">Valida {{ punto.nome }}</span>
-    <div class="float-right"> 
-      {% bootstrap_button "Salva" button_type="submit" button_class="btn-primary" %}
-      {% bootstrap_button "Ripristina" button_type="reset" button_class="btn-secondary" %}
-      <a href="{% url 'show' punto.slug %}" class="btn btn-secondary text-light">Annulla</a>
-    </div> 
-  </div> 
+    {% form_buttons %}
+  </div>
   {% bootstrap_form form layout='horizontal' size='small' %}
   {% csrf_token %}
   </form>
