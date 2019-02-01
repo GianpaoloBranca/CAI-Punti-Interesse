@@ -15,7 +15,7 @@
     <div class="float-right"> 
       {% bootstrap_button "Salva" button_type="submit" button_class="btn-primary" %}
       {% bootstrap_button "Ripristina" button_type="reset" button_class="btn-secondary" %}
-      <a href="{% url 'show' punto.slug %}" class="btn btn-secondary text-light">Annulla</a>
+      <a href="{% url 'show' punto.slug %}" class="btn btn-info text-light">Annulla</a>
     </div> 
   </div>
   {% bootstrap_form form layout='horizontal' size='small' %}

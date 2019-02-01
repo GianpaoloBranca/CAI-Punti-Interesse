@@ -5,13 +5,17 @@
 {% block main %}
 <div class="container">
 {% if form %}
-  <h3>Valida {{ punto.nome }}</h3>
-  <hr>
   <form id="val-form" method="POST" action="{% url 'validate' punto.slug %}">
+  <div class="pb-4">
+    <span class="h3">Valida {{ punto.nome }}</span>
+    <div class="float-right"> 
+      {% bootstrap_button "Salva" button_type="submit" button_class="btn-primary" %}
+      {% bootstrap_button "Ripristina" button_type="reset" button_class="btn-secondary" %}
+      <a href="{% url 'show' punto.slug %}" class="btn btn-secondary text-light">Annulla</a>
+    </div> 
+  </div> 
   {% bootstrap_form form layout='horizontal' size='small' %}
   {% csrf_token %}
-  {% bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}
-  {% bootstrap_button "Reset" button_type="reset" button_class="btn-primary" %}
   </form>
 {% else %}
 <p>Form mancante</p>
