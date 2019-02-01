@@ -4,7 +4,8 @@ from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePu
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-    data = forms.DateField(widget=forms.HiddenInput(), required=False)
+    latitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
+    longitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
 
     class Meta:
         model = PuntoInteresse
@@ -39,8 +40,7 @@ class FotoAccessoriaForm(forms.ModelForm):
         fields = ('foto',)
 
 class ValidazioneForm(forms.ModelForm):
-    data = forms.DateField(widget=forms.HiddenInput(), required=False)
-    data_aggiornamento = forms.DateField(widget=forms.HiddenInput(), required=False)
+    quota = forms.IntegerField(min_value=0)
 
     class Meta:
         model = ValidazionePunto

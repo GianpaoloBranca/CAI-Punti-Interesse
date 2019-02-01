@@ -53,9 +53,15 @@
           <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">Modifica</a>
         </div>
       {% endif %}
-      {% if user|is_validatore and not punto.validato %}
+      {% if user|is_validatore %}
         <div class="float-right pt-2 d-inline">
-          <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">Valida</a>
+          <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
+            {% if punto.validato %}
+            Modifica Validazione
+            {% else %}
+            Valida
+            {% endif %}
+          </a>
         </div>
       {% endif %}
       <br>
@@ -93,7 +99,7 @@
         <dt class="col-sm-5">Valenza</dt>
         <dd class="col-sm-7">{{ punto.valenza }}</dd>
         <dt class="col-sm-5">Istituto di tutela</dt>
-        <dd class="col-sm-7">{{ punto.valenza }}</dd>
+        <dd class="col-sm-7">{{ punto.istituto }}</dd>
         <dt class="col-sm-5">Motivo della fruizione</dt>
         <dd class="col-sm-7">{{ punto.motivo }}</dd>
         <dt class="col-sm-5">Riferimenti bibliografici</dt>

@@ -1,9 +1,11 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.core.validators import MinValueValidator
+from punti_interesse.validators import validate_degree
 
 class PuntoInteresse(models.Model):
-    longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6)
-    latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6)
+    longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
+    latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
 
     categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia')
     tipo = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico')
@@ -64,7 +66,7 @@ class ValidazionePunto(models.Model):
     regione = models.CharField(verbose_name='Regione', max_length=64)
     comunita_montana = models.CharField(verbose_name='Comunità montana', max_length=128)
     gruppo_montuoso = models.CharField(verbose_name='Gruppo montuoso', max_length=128)
-    quota = models.IntegerField(verbose_name='Quota')
+    quota = models.IntegerField(verbose_name='Quota', validators=[MinValueValidator(0)])
 
     class Meta:
         verbose_name = 'Validazione Punto'
