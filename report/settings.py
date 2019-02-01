@@ -144,3 +144,5 @@ MEDIA_URL = '/media/'
 # Login
 
 LOGIN_URL = '/pi/login/'
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']

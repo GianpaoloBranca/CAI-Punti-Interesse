@@ -38,6 +38,10 @@ def home(request):
 @login_required
 def show(request, slug):
     punto = get_pi(slug)
+
+    if not punto:
+        return render(request, '404.html', status=404)
+
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['val'] = get_val(punto)
@@ -106,6 +110,10 @@ def edit(request, slug):
 @user_passes_test(is_validatore)
 def validate(request, slug):
     punto = get_pi(slug)
+    
+    if not punto:
+        render(request, '404.html', status=404)
+
     val = get_val(punto)
 
     if request.method == 'POST':
@@ -125,6 +133,12 @@ def validate(request, slug):
     context_dict['punto'] = punto
     context_dict['form'] = form
     return render(request, 'punti_interesse/validate.html', context_dict)
+
+def handler404(request):
+    return render(request, '404.html', status=404)
+
+def handler500(request):
+    return render(request, '500.html', status=500)
 
 #______________________________________________________________________________
 

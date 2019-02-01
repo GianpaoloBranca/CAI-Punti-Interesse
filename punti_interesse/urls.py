@@ -10,3 +10,6 @@ urlpatterns = [
     url(r'^(?P<slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
     url(r'^(?P<slug>[\w\-]+)/valida/$', views.validate, name='validate'),
 ]
+
+handler404 = views.handler404
+handler500 = views.handler500
