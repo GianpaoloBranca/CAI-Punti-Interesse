@@ -6,7 +6,8 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'new' %}" onsubmit="return confirm('Salvare il Punto di Interesse?');"></form>
+  <form id="form-id" method="POST" enctype="multipart/form-data" action="{% url 'new' %}"
+    onsubmit="return confirm('Salvare il Punto di Interesse?');">
   <div class="pb-4">
     <span class="h3">Crea nuovo punto</span>
     {% form_buttons %}
