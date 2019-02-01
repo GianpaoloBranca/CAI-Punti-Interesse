@@ -59,7 +59,7 @@ def new(request):
             form.save(commit=True)
             punto = PuntoInteresse.objects.get(nome=form.cleaned_data['nome'])
             save_fotos(fotoformset, punto)
-            return show(request, punto.slug)
+            return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
 
     else:
         form = PuntoInteresseForm()
@@ -90,7 +90,7 @@ def edit(request, slug):
             punto.validato = False
             punto.save()
             save_fotos(fotoformset, punto)
-            return show(request, punto.slug)
+            return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
     else:
         form = PuntoInteresseForm(instance=punto)
         # pylint: disable=E1123
@@ -117,7 +117,7 @@ def validate(request, slug):
             val.save()
             punto.validato = True
             punto.save()
-            return show(request, slug)
+            return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
     else:
         form = ValidazioneForm(instance=val)
 
