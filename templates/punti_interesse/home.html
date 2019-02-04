@@ -6,9 +6,12 @@
   <div class="row">
     <div class="col-md-12">
       <div class="row pb-3">
-        <div class="col-sm-9 form-inline">
-          <input class="form-control" type="search" placeholder="Cerca punto di interesse">
-          <button class="btn btn-primary ml-2"><i class="fas fa-search"></i> Cerca</button>
+        <div class="col-sm-9">
+          <form class="form-inline" method="GET" action=".">
+            <input class="form-control" name="nome" type="search" placeholder="Cerca punto di interesse" {% if query %} value="{{ query }}" {% endif %}>            
+            <button class="btn btn-primary ml-2" type="submit"><i class="fas fa-search"></i> Cerca</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-2"><i class="fas fa-redo"></i> Ripristina</a>
+          </form>
         </div>
         {% if user|is_rilevatore %}
         <div class="col-sm-3">
@@ -16,6 +19,7 @@
         </div>
         {% endif %}
       </div>
+
       {% if punti %}
       <table class="table">
       <thead>
@@ -42,7 +46,7 @@
       </tbody>
       </table>
       {% else %}
-      Errore! Nessun punto di interesse disponibile
+      <p>Errore! Nessun punto di interesse disponibile</p>
       {% endif %}
     </div>
   </div>

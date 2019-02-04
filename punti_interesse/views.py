@@ -32,8 +32,13 @@ def logout(request):
 
 @login_required
 def home(request):
-    lista_punti = PuntoInteresse.objects.order_by('data')
-    return render(request, 'punti_interesse/home.html', {'punti': lista_punti})
+    query = request.GET.get('nome')
+    if query:
+        lista_punti = PuntoInteresse.objects.filter(nome__icontains=query).order_by('data')
+    else:
+        lista_punti = PuntoInteresse.objects.order_by('data')
+
+    return render(request, 'punti_interesse/home.html', {'punti': lista_punti, 'query': query})
 
 @login_required
 def show(request, slug):

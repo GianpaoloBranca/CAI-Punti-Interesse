@@ -11,16 +11,15 @@
 
 {% if punto %}
 <main role="main" class="container">
-  {% if not punto.validato %}
-    {% if val %}
+  {% if not punto.validato %} 
     <div class="alert alert-info" role="alert">
-      <i class="fas fa-exclamation-triangle"></i> La validazione di questo punto di interesse è scaduta
+      <i class="fas fa-exclamation-triangle"></i>
+      {% if val %}
+       La validazione di questo punto di interesse è scaduta
+      {% else %}
+       Questo punto di interesse non è ancora stato validato
+      {% endif %}
     </div>
-    {% else %}
-    <div class="alert alert-info" role="alert">
-      <i class="fas fa-exclamation-triangle"></i> Questo punto di interesse non è ancora stato validato
-    </div>
-    {% endif %}
   {% endif %}
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
@@ -50,16 +49,16 @@
       <span class="h1">{{ punto.nome }}</span>
       {% if user|is_rilevatore %}
         <div class="float-right pt-2 d-inline">
-          <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">Modifica</a>
+          <a class="btn btn-primary" href="{% url 'edit' punto.slug %}"><i class="fas fa-edit"></i> Modifica</a>
         </div>
       {% endif %}
       {% if user|is_validatore %}
         <div class="float-right pt-2 d-inline">
           <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
             {% if punto.validato %}
-            Modifica Validazione
+            <i class="fas fa-edit"></i> Modifica Validazione
             {% else %}
-            Valida
+            <i class="fas fa-check-circle"></i> Valida
             {% endif %}
           </a>
         </div>
