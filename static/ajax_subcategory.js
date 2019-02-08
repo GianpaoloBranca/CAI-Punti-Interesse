@@ -1,14 +1,14 @@
 function load_subcategories() {
-    var url = $("#id_form").attr("ajax_subcat_url");  // get the url of the `load_cities` view
-    var cat_id = $(this).val();  // get the selected country ID from the HTML input
+    var url = $("#id_form").attr("ajax_subcat_url");
+    var cat_id = $(this).val();
 
-    $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request 
+    $.ajax({
+        url: url,
         data: {
-            'categoria': cat_id       // add the country id to the GET parameters
+            'categoria': cat_id
         },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-            $("#id_sottocategoria").html(data);  // replace the contents of the city input with the data that came from the server
+        success: function (data) {
+            $("#id_sottocategoria").html(data);
         }
     });
 }
