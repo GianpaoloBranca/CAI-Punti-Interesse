@@ -1,18 +1,23 @@
 from django import forms
 from django.contrib.auth.models import User
-from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto
+from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, InteresseSpecifico, TipoInteresse
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     latitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
     longitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
 
+    def __init__(self, *args, **kwargs):
+        categoria = kwargs.pop('categoria', None)
+        super().__init__(*args, **kwargs)
+        self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.filter(tipo=categoria)
+
     class Meta:
         model = PuntoInteresse
         fields = [
             'nome',
             'categoria',
-            'tipo',
+            'sottocategoria',
             'longitudine',
             'latitudine',
             'localita',

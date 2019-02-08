@@ -1,3 +1,9 @@
 from django.test import TestCase
+from punti_interesse.models import PuntoInteresse
 
-# Create your tests here.
+class PuntoInteresseTest(TestCase):
+
+    # TODO create some tests
+
+    def test_ensure_correct_degrees(self):
+        pass

@@ -8,7 +8,7 @@ class PuntoInteresse(models.Model):
     latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
 
     categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia')
-    tipo = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico')
+    sottocategoria = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico')
 
     nome = models.CharField(verbose_name='Nome', max_length=128)
     localita = models.CharField(verbose_name='Località', max_length=128)

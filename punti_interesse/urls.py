@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^(?P<slug>[\w\-]+)/$', views.show, name='show'),
     url(r'^(?P<slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
     url(r'^(?P<slug>[\w\-]+)/valida/$', views.validate, name='validate'),
+    url(r'^ajax/load_subcategories/$', views.load_subcategories, name='ajax_load_subcategories')
 ]
 
 handler404 = views.handler404

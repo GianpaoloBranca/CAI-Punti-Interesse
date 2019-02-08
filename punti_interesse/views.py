@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as dj_login, logout as dj_lo
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria
+from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 
@@ -101,7 +101,7 @@ def edit(request, slug):
             save_fotos(fotoformset, punto)
             return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
     else:
-        form = PuntoInteresseForm(instance=punto)
+        form = PuntoInteresseForm(instance=punto, categoria=punto.categoria)
         # pylint: disable=E1123
         fotoformset = FotoFormSet(queryset=fotos)
 
@@ -115,7 +115,7 @@ def edit(request, slug):
 @user_passes_test(is_validatore)
 def validate(request, slug):
     punto = get_pi(slug)
-    
+
     if not punto:
         render(request, '404.html', status=404)
 
@@ -138,6 +138,14 @@ def validate(request, slug):
     context_dict['punto'] = punto
     context_dict['form'] = form
     return render(request, 'punti_interesse/validate.html', context_dict)
+
+def load_subcategories(request):
+    categoria = request.GET.get('categoria')
+    if categoria != '':
+        sottocategorie = InteresseSpecifico.objects.filter(tipo=categoria)
+    else:
+        sottocategorie = InteresseSpecifico.objects.none()
+    return render(request, 'punti_interesse/form_subcategory.html', {'sottocategorie' : sottocategorie})
 
 def handler404(request):
     return render(request, '404.html', status=404)

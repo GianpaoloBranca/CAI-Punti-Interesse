@@ -6,8 +6,9 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  <form id="pi-form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}"
-    onsubmit="return confirm('Salvare il Punto di Interesse?\nATTENZIONE: l\'eventuale validazione presente sarà annullata.');">
+  <form id="id_form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}"
+    onsubmit="return confirm('Salvare il Punto di Interesse?\nATTENZIONE: l\'eventuale validazione presente sarà annullata.');" 
+    ajax_subcat_url="{% url 'ajax_load_subcategories' %}">
   <div class="pb-4">
     <span class="h3">Modifica {{ punto.nome }}</span>
     {% form_buttons %}
@@ -27,3 +28,7 @@
 {% btn_scroll_top %}
 
 {% endblock main %}
+
+{% block script %}
+<script src="{% static 'ajax_subcategory.js' %}"></script>
+{% endblock script %}

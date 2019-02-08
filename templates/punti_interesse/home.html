@@ -39,7 +39,7 @@
         {% endif %}
         <td><a class="text-reset" href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
         <td>{{ punto.categoria }}</td>
-        <td>{{ punto.tipo }}</td>
+        <td>{{ punto.sottocategoria }}</td>
         <td>{{ punto.data }}</td>
         </tr>
       {% endfor %}

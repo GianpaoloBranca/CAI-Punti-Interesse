@@ -6,8 +6,9 @@
 {% block main %}
 {% if form %}
 <div class="container">
-  <form id="form-id" method="POST" enctype="multipart/form-data" action="{% url 'new' %}"
-    onsubmit="return confirm('Salvare il Punto di Interesse?');">
+  <form id="id_form" method="POST" enctype="multipart/form-data" action="{% url 'new' %}"
+    onsubmit="return confirm('Salvare il Punto di Interesse?');" 
+    ajax_subcat_url="{% url 'ajax_load_subcategories' %}">
   <div class="pb-4">
     <span class="h3">Crea nuovo punto</span>
     {% form_buttons %}
@@ -27,3 +28,7 @@
 {% btn_scroll_top %}
 
 {% endblock main %}
+
+{% block script %}
+<script src="{% static 'ajax_subcategory.js' %}"></script>
+{% endblock script %}
