@@ -101,7 +101,7 @@ def edit(request, slug):
             save_fotos(fotoformset, punto)
             return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
     else:
-        form = PuntoInteresseForm(instance=punto, categoria=punto.categoria)
+        form = PuntoInteresseForm(instance=punto)
         # pylint: disable=E1123
         fotoformset = FotoFormSet(queryset=fotos)
 
