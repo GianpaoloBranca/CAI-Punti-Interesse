@@ -48,11 +48,13 @@ class PuntoInteresseForm(forms.ModelForm):
             'foto_copertina',
         ]
 
+
 class FotoAccessoriaForm(forms.ModelForm):
 
     class Meta:
         model = FotoAccessoria
         fields = ('foto',)
+
 
 class ValidazioneForm(forms.ModelForm):
     quota = forms.IntegerField(min_value=0)
@@ -66,6 +68,7 @@ class ValidazioneForm(forms.ModelForm):
             'quota',
             'descrizione',
         ]
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
