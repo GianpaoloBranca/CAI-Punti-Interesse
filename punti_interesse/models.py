@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator
-from punti_interesse.validators import validate_degree
+from punti_interesse.validators import validate_degree, MaxSizeValidator
 
 class PuntoInteresse(models.Model):
     longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
@@ -22,7 +22,7 @@ class PuntoInteresse(models.Model):
     periodo = models.CharField(verbose_name='Periodo di visita consigliato', max_length=256)
     istituto = models.CharField(verbose_name='Istituto di tutela', max_length=128)
 
-    foto_copertina = models.ImageField(verbose_name='Foto copertina', upload_to='foto_copertina/', null=True, blank=True)
+    foto_copertina = models.ImageField(verbose_name='Foto copertina', upload_to='foto_copertina/', null=True, blank=True, validators=[MaxSizeValidator(1)])
 
     descr_breve = models.TextField(verbose_name='Descrizione oggetto breve', max_length=256)
     descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024, blank=True)
@@ -121,7 +121,7 @@ class EstensioneInteresse(models.Model):
 
 class FotoAccessoria(models.Model):
     punto = models.ForeignKey(PuntoInteresse, on_delete=models.CASCADE)
-    foto = models.ImageField(verbose_name='Foto', upload_to='foto_accessorie/')
+    foto = models.ImageField(verbose_name='Foto', upload_to='foto_accessorie/', validators=[MaxSizeValidator(1)])
 
     class Meta:
         verbose_name = 'Foto Accessoria'
