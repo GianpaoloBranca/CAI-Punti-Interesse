@@ -22,3 +22,24 @@ $(':file').change(function() {
         this.value = null;
     }
 });
+
+// "Visitabile2" validation
+$(document).ready(function() {
+    var visitabile = $('#id_visitabile');
+    var visitabile2 = $('#id_visitabile2');
+
+    if(!visitabile.is(":checked")) {
+        visitabile2.prop('checked', false);
+        visitabile2.prop('disabled', true);
+    }
+});
+
+$('#id_visitabile').change(function() {
+    var visitabile2 = $('#id_visitabile2');
+    if (!this.checked) {
+        visitabile2.prop('checked', false);
+        visitabile2.prop('disabled', true);
+    } else {
+        visitabile2.prop('disabled', false);
+    }
+});
