@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
@@ -21,7 +22,8 @@ def login(request):
         else:
             # Bad login details were provided. So we can't log the user in.
             print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
+            messages.warning(request, "Nome utente o password errati.")
+            return HttpResponseRedirect(request.path)
 
     return render(request, 'punti_interesse/login.html')
 

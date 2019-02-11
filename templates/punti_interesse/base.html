@@ -30,16 +30,16 @@
           <a class="nav-link text-light" href="{% url 'home' %}">UnicoCAI Punti di Interesse</a>
         </li>
       </ul>
+      {% if user.is_authenticated %}
       <ul class="nav form-inline text-right pr-3">
-        {% if user %}
         <li class="nav-item pr-3">
           <span class="text-light"><i class="fas fa-user fa-fw"></i> {{ user.username }}</span>
         </li>
-        {% endif %}
         <li class="nav-item">
           <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
         </li>
       </ul>
+      {% endif %}
       <!-- END Navbar sections and links -->
     </nav>
     {% block main %}{% endblock main %}
