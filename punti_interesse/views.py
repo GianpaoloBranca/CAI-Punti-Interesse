@@ -7,7 +7,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
+from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, TipoInteresse
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 
@@ -198,6 +198,9 @@ def save_fotos(fotoformset, punto):
 
 def write_pi_csv(writer):
     writer.writerow(['Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'])
-    queryset = PuntoInteresse.objects.values_list('nome', 'latitudine', 'longitudine', 'categoria', 'sottocategoria')
-    for punto in queryset:
-        writer.writerow(punto)
+    points = PuntoInteresse.objects.values_list('nome', 'latitudine', 'longitudine', 'categoria', 'sottocategoria')
+    cats = dict((c.id, c.descrizione) for c in TipoInteresse.objects.all())
+    subcats = dict((s.id, s.descrizione) for s in InteresseSpecifico.objects.all())
+    for punto in points:
+        row = (punto[0], punto[1], punto[2], cats[punto[3]], subcats[punto[4]])
+        writer.writerow(row)
