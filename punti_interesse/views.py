@@ -1,7 +1,9 @@
+import csv
 from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -141,6 +143,14 @@ def validate(request, slug):
     context_dict['form'] = form
     return render(request, 'punti_interesse/validate.html', context_dict)
 
+def export_csv(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="punti.csv"'
+    writer = csv.writer(response)
+    write_pi_csv(writer)
+    return response
+
 def load_subcategories(request):
     categoria = request.GET.get('categoria')
     if categoria != '':
@@ -185,3 +195,9 @@ def save_fotos(fotoformset, punto):
                 foto_acc.delete()
             else:
                 foto_acc.save()
+
+def write_pi_csv(writer):
+    writer.writerow(['Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'])
+    queryset = PuntoInteresse.objects.values_list('nome', 'latitudine', 'longitudine', 'categoria', 'sottocategoria')
+    for punto in queryset:
+        writer.writerow(punto)
