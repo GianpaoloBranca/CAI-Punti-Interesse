@@ -11,7 +11,7 @@
 
 {% if punto %}
 <main role="main" class="container">
-  {% if not punto.validato %} 
+  {% if not punto.validato %}
     <div class="alert alert-info" role="alert">
       <i class="fas fa-exclamation-triangle"></i>
       {% if val %}
@@ -67,7 +67,7 @@
       {{ punto.categoria }} -
       {{ punto.sottocategoria }} <br>
       <hr>
-      {{ punto.descr_breve }} <br><br>
+      {{ punto.descr_breve|markup|safe }} <br><br>
       {% if punto.visitabile %}
         <i class="fas fa-check fa-fw"></i> Visitabile
       {% else %}

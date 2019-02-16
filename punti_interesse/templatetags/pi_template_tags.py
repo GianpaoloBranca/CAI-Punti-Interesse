@@ -1,4 +1,5 @@
 from django import template
+from django.utils.html import escape
 
 register = template.Library()
 
@@ -17,3 +18,30 @@ def form_buttons(context):
 @register.inclusion_tag('top_scroll.html')
 def btn_scroll_top():
     return {}
+
+@register.filter
+def markup(text):
+    escaped = escape(text)
+    return mark_italic(escaped)
+
+def mark_italic(text):
+    output = ''
+    split_t = text.split('**')
+
+    in_i = False
+    counter = 0
+    last = len(split_t) - 1
+
+    for elem in split_t:
+        if in_i:
+            # this means we have an odd number of '**'. Ignores the last one.
+            if counter == last:
+                output += '**' + elem
+            else:
+                output += '<i>' + elem + '</i>'
+                in_i = False
+        else:
+            output += elem
+            in_i = True
+        counter += 1
+    return output
