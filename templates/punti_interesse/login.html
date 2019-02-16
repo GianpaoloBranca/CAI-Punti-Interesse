@@ -13,7 +13,7 @@
     {% endfor %}
     </div>
     {% endif %}
-    <form id="login-form" method="POST" action="{% url 'login' %}">
+    <form class="pt-1" id="login-form" method="POST" action="{% url 'login' %}">
       {% csrf_token %}
       <div class="form-group">
         <input type="text" class="form-control" name="username" placeholder="Nome Utente">
@@ -22,6 +22,7 @@
         <input type="password" class="form-control" name="password" placeholder="Password">
       </div>
       <button type="submit" class="btn btn-primary">Entra</button>
+      <small class="float-right"><a href='/admin/'>Accedi come amministratore</a></small>
     </form>
   </div>
 </div>
