@@ -143,6 +143,7 @@ def validate(request, slug):
     context_dict['form'] = form
     return render(request, 'punti_interesse/validate.html', context_dict)
 
+@staff_member_required
 def export_csv(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
