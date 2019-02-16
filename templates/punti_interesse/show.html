@@ -23,6 +23,7 @@
   {% endif %}
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
+      {% if punto.foto_copertina %}
       <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
       <div class="row m-0 py-2 px-1 mt-2 rounded" style="background-color:#e1e8f0">
         <div class="col-2 px-1">
@@ -40,6 +41,11 @@
           {% endfor %}
         {% endif %}
       </div>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+      <i class="fas fa-exclamation-triangle"></i> Nessuna foto disponibile.
+      </div>
+      {% endif %}
       <h3 class="pt-2">Descrizione estesa</h3>
       <p class="text-justify">{{ punto.descr_estesa }}</p>
       <h4 class="pt-2">Descrizione sito</h4>
