@@ -7,6 +7,7 @@ django.setup()
 
 # pylint: disable=wrong-import-position
 from punti_interesse.models import *
+from django.core.exceptions import ObjectDoesNotExist
 
 def populate():
 
@@ -33,21 +34,6 @@ def populate():
         for subcat in subcats:
             add_subcat(categoria, subcat)
 
-    #default_point_fields = {
-    #    'longitudine' : 0.0,
-    #    'latitudine' : 0.0,
-    #    'categoria' : TipoInteresse.objects.get(descrizione='Interesse Culturale'),
-    #    'sottocategoria' : InteresseSpecifico.objects.get(descrizione='Borgo'),
-    #    'nome' : 'Punto Vuoto',
-    #    'localita' : '.',
-    #    'valle' : '.',
-    #    'qualita' : QualitaInteresse.objects.get(descrizione='Raro'),
-    #    'estensione' : EstensioneInteresse.objects.get(descrizione='Locale'),
-    #    'valenza' : '.',
-    #    'visitabile' : False,
-    #    'visitabile2' : False,
-    #    # TODO completare
-    #}
 
 def add_cat(descr):
     cat = TipoInteresse.objects.get_or_create(descrizione=descr)[0]
@@ -73,6 +59,37 @@ def add_point(fields):
     punto = PuntoInteresse(fields)
     punto.save()
     return punto
+
+def add_default_point():
+    try:
+        default_point_fields = {
+            'longitudine' : 0.0,
+            'latitudine' : 0.0,
+            'categoria' : TipoInteresse.objects.get(descrizione='Interesse Culturale'),
+            'sottocategoria' : InteresseSpecifico.objects.get(descrizione='Borgo'),
+            'nome' : 'Punto Vuoto',
+            'localita' : '.',
+            'valle' : '.',
+            'qualita' : QualitaInteresse.objects.get(descrizione='Raro'),
+            'estensione' : EstensioneInteresse.objects.get(descrizione='Locale'),
+            'valenza' : '.',
+            'visitabile' : False,
+            'visitabile2' : False,
+            'periodo' : '.',
+            'istituto': '.',
+            'foto_copertina': '.',
+            'descr_breve' : '.',
+            'descr_estesa' : '.',
+            'descr_sit' : '.',
+            'motivo' : '.',
+            'rif_biblio' : '.',
+            'rif_sito' : '.',
+        }
+        add_point(default_point_fields)
+
+    except ObjectDoesNotExist:
+        print("Missing objects in related tables. Did you forget to call populate() first?")
+
 
 if __name__ == '__main__':
     print('populating the db...')
