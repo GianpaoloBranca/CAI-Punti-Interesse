@@ -19,7 +19,7 @@
       CAI
     </title>
   </head>
-  <body style='padding-top:80px'>
+  <body style='padding-top:80px;'>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand mx-3" href="#">
         <img src="{% static "images/logo_cai.png" %}" height="45" alt="">
@@ -42,7 +42,20 @@
       {% endif %}
       <!-- END Navbar sections and links -->
     </nav>
+
     {% block main %}{% endblock main %}
+
+    <footer class="bg-dark" style="height:50px;">
+      <table style="height: 100%;">
+        <tbody>
+          <tr>
+            <td class="align-middle">
+              <small class="text-light font-weight-light pl-2">Copyright &copy; 2019 Gianpaolo Branca. Tutti i diritti riservati.</small>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
