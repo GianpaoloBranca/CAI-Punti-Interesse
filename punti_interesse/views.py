@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, TipoInteresse
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
+from punti_interesse.utils import Echo, csv_iterator
 
 def login(request):
     if request.method == 'POST':
@@ -145,11 +146,10 @@ def validate(request, slug):
 
 @staff_member_required
 def export_csv(request):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
+    pseudo_buffer = Echo()
+    writer = csv.writer(pseudo_buffer)
+    response = StreamingHttpResponse((writer.writerow(row) for row in csv_iterator()), content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="punti.csv"'
-    writer = csv.writer(response)
-    write_pi_csv(writer)
     return response
 
 def load_subcategories(request):
@@ -196,12 +196,3 @@ def save_fotos(fotoformset, punto):
                 foto_acc.delete()
             else:
                 foto_acc.save()
-
-def write_pi_csv(writer):
-    writer.writerow(['Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'])
-    points = PuntoInteresse.objects.values_list('nome', 'latitudine', 'longitudine', 'categoria', 'sottocategoria')
-    cats = dict((c.id, c.descrizione) for c in TipoInteresse.objects.all())
-    subcats = dict((s.id, s.descrizione) for s in InteresseSpecifico.objects.all())
-    for punto in points:
-        row = (punto[0], punto[1], punto[2], cats[punto[3]], subcats[punto[4]])
-        writer.writerow(row)
