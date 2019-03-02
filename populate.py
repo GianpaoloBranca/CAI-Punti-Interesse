@@ -15,7 +15,7 @@ def populate():
     int_nat = ['Punto panoramico', 'Geosito', 'Biosito vegetazione', 'Biosito flora', 'Biosito fauna']
     degr_amb = ['Incendio', 'Cantiere', 'Frana', 'Inquinamento']
     qualita = ['Raro', 'Esemplificativo', 'Rappresentativo', 'Endemico']
-    estensione = ['Locale', 'Ragionale', 'Nazionale', 'Internazionale']
+    estensione = ['Locale', 'Regionale', 'Nazionale', 'Internazionale']
     stati_conservazione = ['Povero', 'Normale', 'Buono'] # valori temporanei
 
     categorie = {
