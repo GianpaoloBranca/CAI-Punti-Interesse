@@ -14,9 +14,9 @@
     {% form_buttons %}
   </div>
   {% bootstrap_form form layout='horizontal' size='small' %}
-  {{ fotoformset.management_form }}
   <hr>
   <h4> Foto aggiuntive: </h4>
+  {{ fotoformset.management_form }}
   {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
   {% csrf_token %}
   </form>

@@ -14,10 +14,24 @@
     {% form_buttons %}
   </div>
   {% bootstrap_form form layout='horizontal' size='small' %}
-  {{ fotoformset.management_form }}
   <hr>
-  <h4> Foto aggiuntive: </h4>
+  <h3 class="pb-2"> Foto aggiuntive: </h3>
+  {{ fotoformset.management_form }}
   {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
+  {% comment %} <!-- comment -->
+    {% for fotoform in fotoformset %}
+    <div class="form-group row">
+      <div class="col-md-3">
+        {% if fotoform.foto.value %}
+        <img class="rounded" src="{{ MEDIA_URL }}{{ fotoform.foto.value }}" alt="" style="height:70px">
+        {% endif %}
+      </div>
+      <div class="col-md-9">
+        {% bootstrap_field fotoform.foto show_label=False %}
+      </div>
+    </div>
+    {% endfor %}
+  {% endcomment %} <!-- end comment -->
   {% csrf_token %}
   </form>
 </div>
