@@ -47,9 +47,9 @@
       </div>
       {% endif %}
       <h3 class="pt-2">Descrizione estesa</h3>
-      <p class="text-justify">{{ punto.descr_estesa }}</p>
+      <p class="text-justify">{{ punto.descr_estesa|markup|safe }}</p>
       <h4 class="pt-2">Descrizione sito</h4>
-      <p>{{ punto.descr_sito }}</p>
+      <p>{{ punto.descr_sito|markup|safe }}</p>
     </div>
     <div class="col-md-6 order-1 order-md-2">
       <span class="h1">{{ punto.nome }}</span>
@@ -106,11 +106,11 @@
         <dt class="col-sm-5">Istituto di tutela</dt>
         <dd class="col-sm-7">{{ punto.istituto }}</dd>
         <dt class="col-sm-5">Motivo della fruizione</dt>
-        <dd class="col-sm-7">{{ punto.motivo }}</dd>
+        <dd class="col-sm-7">{{ punto.motivo|markup|safe }}</dd>
         <dt class="col-sm-5">Riferimenti bibliografici</dt>
-        <dd class="col-sm-7">{{ punto.rif_biblio }}</dd>
+        <dd class="col-sm-7">{{ punto.rif_biblio|markup|safe }}</dd>
         <dt class="col-sm-5">Riferimenti sitografici</dt>
-        <dd class="col-sm-7">{{ punto.rif_sito }}</dd>
+        <dd class="col-sm-7">{{ punto.rif_sito|markup|safe }}</dd>
       </dl>
     </div>
   </div>
