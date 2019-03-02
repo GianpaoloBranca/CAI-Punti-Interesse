@@ -7,14 +7,14 @@ class PuntoInteresse(models.Model):
     longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
     latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
 
-    categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia')
-    sottocategoria = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico')
+    categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia', on_delete=models.PROTECT)
+    sottocategoria = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico', on_delete=models.PROTECT)
 
     nome = models.CharField(verbose_name='Nome', max_length=128)
     localita = models.CharField(verbose_name='Località', max_length=128)
     valle = models.CharField(verbose_name='Valle', max_length=128)
-    qualita = models.ForeignKey('QualitaInteresse', verbose_name='Qualità interesse')
-    estensione = models.ForeignKey('EstensioneInteresse', verbose_name='Estensione Interesse')
+    qualita = models.ForeignKey('QualitaInteresse', verbose_name='Qualità Interesse', on_delete=models.PROTECT)
+    estensione = models.ForeignKey('EstensioneInteresse', verbose_name='Estensione Interesse', on_delete=models.PROTECT)
 
     valenza = models.CharField(verbose_name='Titolo della valenza', max_length=128)
     visitabile = models.BooleanField(verbose_name='Visitabile')
@@ -28,14 +28,15 @@ class PuntoInteresse(models.Model):
     descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024, blank=True)
     descr_sito = models.TextField(verbose_name='Descrizione sito', max_length=256, blank=True)
 
-    #stato di conservazione
+    stato_conservazione = models.ForeignKey('StatoConservazione', verbose_name='Stato Conservazione', on_delete=models.PROTECT, default=2) # 2 = normale
 
     motivo = models.TextField(verbose_name='Motivo per la fruizione', max_length=256, blank=True)
 
     rif_biblio = models.TextField(verbose_name='Riferimenti bibliografici', max_length=256, blank=True)
     rif_sito = models.TextField(verbose_name='Riferimenti sitografici', max_length=256, blank=True)
 
-    #rilevatore (utente)
+    # TODO set as foreign key (maybe?)
+    rilevatore = models.CharField(verbose_name='Nome rilevatore', max_length=128) # dalla piattaforma del CAI
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
     validato = models.BooleanField(verbose_name='Validato', default=False)
@@ -118,6 +119,18 @@ class EstensioneInteresse(models.Model):
 
     def __str__(self):
         return self.descrizione
+
+
+class StatoConservazione(models.Model):
+    descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)
+
+    class Meta:
+        verbose_name = 'Stato di Conservazione'
+        verbose_name_plural = 'Stati di Conservazione'
+
+    def __str__(self):
+        return self.descrizione
+
 
 class FotoAccessoria(models.Model):
     punto = models.ForeignKey(PuntoInteresse, on_delete=models.CASCADE)

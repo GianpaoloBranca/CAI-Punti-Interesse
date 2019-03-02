@@ -98,7 +98,7 @@
         <dt class="col-sm-5">Estensione</dt>
         <dd class="col-sm-7">{{ punto.estensione }}</dd>
         <dt class="col-sm-5">Stato di conservazione</dt>
-        <dd class="col-sm-7">_Buono</dd>
+        <dd class="col-sm-7">{{ punto.stato_conservazione }}</dd>
         <dt class="col-sm-5">Periodo di visita</dt>
         <dd class="col-sm-7">{{ punto.periodo }}</dd>
         <dt class="col-sm-5">Valenza</dt>
@@ -142,7 +142,7 @@
   </div>
   {% endif %}
   <br>
-  <p><i>Punto di interesse rilevato da<b> _Pino</b>. Aggiornato al <b>{{ punto.data }}</b></i></p>
+  <p><i>Punto di interesse rilevato da<b> {{ punto.rilevatore }}</b>. Aggiornato al <b>{{ punto.data }}</b></i></p>
 </main>
 {% else %}
 Errore! Punto di intersse mancante.

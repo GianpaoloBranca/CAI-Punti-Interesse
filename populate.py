@@ -16,6 +16,7 @@ def populate():
     degr_amb = ['Incendio', 'Cantiere', 'Frana', 'Inquinamento']
     qualita = ['Raro', 'Esemplificativo', 'Rappresentativo', 'Endemico']
     estensione = ['Locale', 'Ragionale', 'Nazionale', 'Internazionale']
+    stati_conservazione = ['Povero', 'Normale', 'Buono'] # valori temporanei
 
     categorie = {
         'Interesse culturale' : int_cult,
@@ -28,6 +29,9 @@ def populate():
 
     for est in estensione:
         add_estensione(est)
+
+    for stato in stati_conservazione:
+        add_statoconservazione(stato)
 
     for cat, subcats in categorie.items():
         categoria = add_cat(cat)
@@ -54,6 +58,11 @@ def add_estensione(descr):
     est = EstensioneInteresse.objects.get_or_create(descrizione=descr)[0]
     est.save()
     return est
+
+def add_statoconservazione(descr):
+    stato = StatoConservazione.objects.get_or_create(descrizione=descr)[0]
+    stato.save()
+    return stato
 
 def add_point(fields):
     punto = PuntoInteresse(fields)

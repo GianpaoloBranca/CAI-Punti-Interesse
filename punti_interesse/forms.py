@@ -32,7 +32,7 @@ class PuntoInteresseForm(forms.ModelForm):
 
     class Meta:
         model = PuntoInteresse
-        fields = [
+        fields = (
             'nome',
             'categoria',
             'sottocategoria',
@@ -42,6 +42,7 @@ class PuntoInteresseForm(forms.ModelForm):
             'valle',
             'qualita',
             'estensione',
+            'stato_conservazione',
             'valenza',
             'visitabile',
             'visitabile2',
@@ -54,7 +55,15 @@ class PuntoInteresseForm(forms.ModelForm):
             'rif_biblio',
             'rif_sito',
             'foto_copertina',
-        ]
+        )
+        widgets = {
+            'descr_estesa' : forms.Textarea(attrs={'rows':8, 'cols':40}),
+            'descr_breve' : forms.Textarea(attrs={'rows':4, 'cols':40}),
+            'descr_sito' : forms.Textarea(attrs={'rows':4, 'cols':40}),
+            'motivo' : forms.Textarea(attrs={'rows':2, 'cols':40}),
+            'rif_biblio' : forms.Textarea(attrs={'rows':2, 'cols':40}),
+            'rif_sito' : forms.Textarea(attrs={'rows':2, 'cols':40}),
+        }
 
 
 class FotoAccessoriaForm(forms.ModelForm):
@@ -69,13 +78,13 @@ class ValidazioneForm(forms.ModelForm):
 
     class Meta:
         model = ValidazionePunto
-        fields = [
+        fields = (
             'regione',
             'comunita_montana',
             'gruppo_montuoso',
             'quota',
             'descrizione',
-        ]
+        )
 
 
 class UserForm(forms.ModelForm):

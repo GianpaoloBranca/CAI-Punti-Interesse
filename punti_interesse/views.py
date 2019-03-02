@@ -70,8 +70,9 @@ def new(request):
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=FotoAccessoria.objects.none())
 
         if form.is_valid() and fotoformset.is_valid():
-            form.save(commit=True)
-            punto = PuntoInteresse.objects.get(nome=form.cleaned_data['nome'])
+            punto = form.save(commit=False)
+            punto.rilevatore = request.user.username
+            punto.save()
             save_fotos(fotoformset, punto)
             return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
 
