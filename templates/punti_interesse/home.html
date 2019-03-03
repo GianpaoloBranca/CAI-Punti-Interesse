@@ -30,9 +30,9 @@
       <thead>
         <tr>
         <th scope="col" style="width: 30%">Nome</th>
-        <th scope="col" style="width: 30%">Categoria</th>
-        <th scope="col" style="width: 20%">Tipo</th>
-        <th scope="col" style="width: 20%">Ultimo Aggiornamento</th>
+        <th scope="col" style="width: 30%" class="d-none d-md-table-cell">Categoria</th>
+        <th scope="col" style="width: 20%" class="d-none d-md-table-cell">Tipo</th>
+        <th scope="col" style="width: 20%" class="d-none d-sm-table-cell">Aggiornamento</th>
         </tr>
       </thead>
       <tbody>
@@ -43,9 +43,9 @@
           <tr class="table-info">
         {% endif %}
         <td><a class="text-reset" href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
-        <td>{{ punto.categoria }}</td>
-        <td>{{ punto.sottocategoria }}</td>
-        <td>{{ punto.data }}</td>
+        <td class="d-none d-md-table-cell">{{ punto.categoria }}</td>
+        <td class="d-none d-md-table-cell">{{ punto.sottocategoria }}</td>
+        <td class="d-none d-sm-table-cell">{{ punto.data }}</td>
         </tr>
       {% endfor %}
       </tbody>
