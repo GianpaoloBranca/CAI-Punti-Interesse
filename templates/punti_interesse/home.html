@@ -5,26 +5,25 @@
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="row pb-3">
-        <div class="col-sm-9">
-          <form class="form-inline" method="GET" action=".">
-            <input class="form-control" name="nome" type="search" placeholder="Cerca punto di interesse" {% if query %} value="{{ query }}" {% endif %}>
-            <button class="btn btn-primary ml-2" type="submit"><i class="fas fa-search"></i> Cerca</button>
-            <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-2"><i class="fas fa-redo"></i> Ripristina</a>
-          </form>
-        </div>
-        {% if user|is_rilevatore %}
-        <div class="col-sm-3">
-          <a class="btn btn-primary btn-block float-right" style="max-width:150px" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
-        </div>
-        {% endif %}
-        {% if user.is_staff %}
-        <div class="col-sm-3">
-          <a class="btn btn-primary btn-block float-right" style="max-width:150px" href="{% url 'export' %}"><i class="fas fa-file-export"></i> Esporta</a>
-        </div>
-        {% endif %}
-      </div>
-
+        <form method="GET" action=".">
+          <div class="form-row justify-content-between">
+            <div class="col-xs-12 col-md-8 col-lg-6 mb-2">
+              <div class="input-group">
+                <input class="form-control rounded" name="nome" type="search" placeholder="Cerca punto di interesse" {% if query %} value="{{ query }}" {% endif %}>
+                <button class="btn btn-primary ml-1" type="submit"><i class="fas fa-search fa-fw"></i><span class="d-none d-sm-inline"> Cerca</span></button>
+                <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-1"><i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span></a>
+              </div>
+            </div>
+            <div class="col-md-2 col-xs-12 mb-2">
+              {% if user|is_rilevatore %}
+              <a class="btn btn-primary btn-block" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
+              {% endif %}
+              {% if user.is_staff %}
+              <a class="btn btn-primary btn-block" href="{% url 'export' %}"><i class="fas fa-file-export"></i> Esporta</a>
+              {% endif %}
+            </div>
+          </div>
+        </form>
       {% if punti %}
       <table class="table">
       <thead>
