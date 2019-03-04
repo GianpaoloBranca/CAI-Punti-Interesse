@@ -1,9 +1,9 @@
 <a {% if punto %} href="{% url 'show' punto.slug %}" {% else %} href="{% url 'home' %}" {% endif %} class="btn btn-secondary">
   <i class="fas fa-times fa-fw"></i><span class="d-none d-sm-inline"> Annulla</span>
 </a>
-<a href="" class="btn btn-secondary">
+<a href="" class="btn btn-secondary ml-2">
   <i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span>
 </a>
-<button class="btn btn-primary" type="submit">
+<button class="btn btn-primary ml-2" type="submit">
   <i class="fas fa-save fa-fw"></i><span class="d-none d-sm-inline"> Salva</span>
 </button>

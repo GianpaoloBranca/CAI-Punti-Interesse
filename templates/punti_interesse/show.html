@@ -27,24 +27,22 @@
   <a class="btn btn-secondary" href="{% url 'home' %}">
     <i class="fas fa-home fa-fw"></i><span class="d-none d-sm-inline"> Elenco</span>
   </a>
-  <button class="btn btn-secondary" onclick="document.getElementById('id_copertina').click();">
+  <button class="btn btn-secondary ml-2" onclick="document.getElementById('id_copertina').click();">
     <i class="fas fa-images fa-fw"></i><span class="d-none d-sm-inline"> Galleria</span>
   </button>
   {% if user|is_rilevatore %}
-  <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">
+  <a class="btn btn-primary ml-2" href="{% url 'edit' punto.slug %}">
     <i class="fas fa-pencil-alt fa-fw"></i><span class="d-none d-sm-inline"> Modifica</span>
   </a>
   {% endif %}
   {% if user|is_validatore %}
-  <div class="pt-2 d-inline">
-    <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
-      {% if punto.validato %}
-      <i class="fas fa-pencil-alt fa-fw"></i><span class="d-none d-sm-inline"> Modifica Validazione</span>
-      {% else %}
-      <i class="fas fa-check-circle fa-fw"></i><span class="d-none d-sm-inline"> Valida</span>
-      {% endif %}
-    </a>
-  </div>
+  <a class="btn btn-primary ml-2" href="{% url 'validate' punto.slug %}">
+    {% if punto.validato %}
+    <i class="fas fa-pencil-alt fa-fw"></i><span class="d-none d-sm-inline"> Modifica Validazione</span>
+    {% else %}
+    <i class="fas fa-check-circle fa-fw"></i><span class="d-none d-sm-inline"> Valida</span>
+    {% endif %}
+  </a>
   {% endif %}
   <hr>
   <div class="row">
