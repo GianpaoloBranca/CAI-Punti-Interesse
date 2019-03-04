@@ -1,11 +1,9 @@
-<div class="float-right">
-  <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Salva</button>
-  <a href="" class="btn btn-secondary"><i class="fas fa-redo"></i> Ripristina</a>
-  <a
-    {% if punto %}
-      href="{% url 'show' punto.slug %}"
-    {% else %}
-      href="{% url 'home' %}"
-    {% endif %}
-    class="btn btn-secondary"><i class="fas fa-times"></i> Annulla</a>
-</div>
+<a {% if punto %} href="{% url 'show' punto.slug %}" {% else %} href="{% url 'home' %}" {% endif %} class="btn btn-secondary">
+  <i class="fas fa-times fa-fw"></i><span class="d-none d-sm-inline"> Annulla</span>
+</a>
+<a href="" class="btn btn-secondary">
+  <i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span>
+</a>
+<button class="btn btn-primary" type="submit">
+  <i class="fas fa-save fa-fw"></i><span class="d-none d-sm-inline"> Salva</span>
+</button>

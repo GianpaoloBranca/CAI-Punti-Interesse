@@ -9,16 +9,14 @@
   <form id="id_form" method="POST" enctype="multipart/form-data" action="{% url 'new' %}"
     onsubmit="return confirm('Salvare il Punto di Interesse?');"
     ajax_subcat_url="{% url 'ajax_load_subcategories' %}">
-  <div class="pb-4">
-    <span class="h3">Crea nuovo punto</span>
     {% form_buttons %}
-  </div>
-  {% bootstrap_form form layout='horizontal' size='small' %}
-  <hr>
-  <h4> Foto aggiuntive: </h4>
-  {{ fotoformset.management_form }}
-  {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
-  {% csrf_token %}
+    <hr>
+    <h2 class="pb-3">Crea nuovo punto</h2>
+    {% bootstrap_form form layout='horizontal' size='small' %}
+    <h4 class="pb-2"> Foto aggiuntive: </h4>
+    {{ fotoformset.management_form }}
+    {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
+    {% csrf_token %}
   </form>
 </div>
 {% else %}

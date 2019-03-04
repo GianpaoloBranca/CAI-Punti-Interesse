@@ -7,12 +7,11 @@
 <div class="container">
 {% if form %}
   <form id="val-form" method="POST" action="{% url 'validate' punto.slug %}" onsubmit="return confirm('Procedere con la Validazione?');">
-  <div class="pb-4">
-    <span class="h3">Valida {{ punto.nome }}</span>
     {% form_buttons %}
-  </div>
-  {% bootstrap_form form layout='horizontal' size='small' %}
-  {% csrf_token %}
+    <hr>
+    <h2 class="pb-2">Valida {{ punto.nome }}</h2>
+    {% bootstrap_form form layout='horizontal' size='small' %}
+    {% csrf_token %}
   </form>
 {% else %}
 <p>Form mancante</p>

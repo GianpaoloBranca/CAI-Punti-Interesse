@@ -9,30 +9,28 @@
   <form id="id_form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}"
     onsubmit="return confirm('Salvare il Punto di Interesse?\nATTENZIONE: l\'eventuale validazione presente sarà annullata.');"
     ajax_subcat_url="{% url 'ajax_load_subcategories' %}">
-  <div class="pb-4">
-    <span class="h3">Modifica {{ punto.nome }}</span>
     {% form_buttons %}
-  </div>
-  {% bootstrap_form form layout='horizontal' size='small' %}
-  <hr>
-  <h3 class="pb-2"> Foto aggiuntive: </h3>
-  {{ fotoformset.management_form }}
-  {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
-  {% comment %} <!-- comment -->
-    {% for fotoform in fotoformset %}
-    <div class="form-group row">
-      <div class="col-md-3">
-        {% if fotoform.foto.value %}
-        <img class="rounded" src="{{ MEDIA_URL }}{{ fotoform.foto.value }}" alt="" style="height:70px">
-        {% endif %}
+    <hr>
+    <h2 class="pb-3">{{ punto.nome }}</h2>
+    {% bootstrap_form form layout='horizontal' size='small' %}
+    <h4 class="pb-2"> Foto aggiuntive: </h4>
+    {{ fotoformset.management_form }}
+    {% bootstrap_formset fotoformset layout='horizontal' size='small' %}
+    {% comment %} <!-- comment -->
+      {% for fotoform in fotoformset %}
+      <div class="form-group row">
+        <div class="col-md-3">
+          {% if fotoform.foto.value %}
+          <img class="rounded" src="{{ MEDIA_URL }}{{ fotoform.foto.value }}" alt="" style="height:70px">
+          {% endif %}
+        </div>
+        <div class="col-md-9">
+          {% bootstrap_field fotoform.foto show_label=False %}
+        </div>
       </div>
-      <div class="col-md-9">
-        {% bootstrap_field fotoform.foto show_label=False %}
-      </div>
-    </div>
-    {% endfor %}
-  {% endcomment %} <!-- end comment -->
-  {% csrf_token %}
+      {% endfor %}
+    {% endcomment %} <!-- end comment -->
+    {% csrf_token %}
   </form>
 </div>
 {% else %}

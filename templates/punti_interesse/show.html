@@ -11,30 +11,28 @@
 
 {% if punto %}
 <main role="main" class="container">
-  <div class="mb-2">
-    <a class="btn btn-primary" href="{% url 'home' %}">
-      <i class="fas fa-home fa-fw"></i><span class="d-none d-sm-inline"> Elenco</span>
+  <a class="btn btn-secondary" href="{% url 'home' %}">
+    <i class="fas fa-home fa-fw"></i><span class="d-none d-sm-inline"> Elenco</span>
+  </a>
+  <button class="btn btn-secondary" onclick="document.getElementById('id_copertina').click();">
+    <i class="fas fa-images fa-fw"></i><span class="d-none d-sm-inline"> Galleria</span>
+  </button>
+  {% if user|is_rilevatore %}
+  <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">
+    <i class="fas fa-pencil-alt fa-fw"></i><span class="d-none d-sm-inline"> Modifica</span>
+  </a>
+  {% endif %}
+  {% if user|is_validatore %}
+  <div class="pt-2 d-inline">
+    <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
+      {% if punto.validato %}
+      <i class="fas fa-pencil-alt fa-fw"></i><span class="d-none d-sm-inline"> Modifica Validazione</span>
+      {% else %}
+      <i class="fas fa-check-circle fa-fw"></i><span class="d-none d-sm-inline"> Valida</span>
+      {% endif %}
     </a>
-    <button class="btn btn-primary" onclick="document.getElementById('id_copertina').click();">
-      <i class="fas fa-images fa-fw"></i><span class="d-none d-sm-inline"> Galleria</span>
-    </button>
-    {% if user|is_rilevatore %}
-    <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">
-      <i class="fas fa-edit fa-fw"></i><span class="d-none d-sm-inline"> Modifica</span>
-    </a>
-    {% endif %}
-    {% if user|is_validatore %}
-    <div class="pt-2 d-inline">
-      <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
-        {% if punto.validato %}
-        <i class="fas fa-edit fa-fw"></i><span class="d-none d-sm-inline"> Modifica Validazione</span>
-        {% else %}
-        <i class="fas fa-check-circle fa-fw"></i><span class="d-none d-sm-inline"> Valida</span>
-        {% endif %}
-      </a>
-    </div>
-    {% endif %}
   </div>
+  {% endif %}
   {% if not punto.validato %}
     <div class="alert alert-info" role="alert">
       <i class="fas fa-exclamation-triangle"></i>
@@ -47,7 +45,7 @@
       {% endif %}
     </div>
   {% endif %}
-
+  <hr>
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
       {% if punto.foto_copertina %}
