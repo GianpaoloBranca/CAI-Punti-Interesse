@@ -7,14 +7,14 @@
     <div class="col-md-12">
       <form method="GET" action=".">
         <div class="form-row justify-content-between">
-          <div class="col-xs-12 col-md-8 col-lg-6 mb-1 mb-md-3 order-2 order-md-1">
+          <div class="col-xs-12 col-md-8 col-lg-6 mb-3 order-2 order-md-1">
             <div class="input-group">
               <input class="form-control rounded" name="nome" type="search" placeholder="Cerca punto di interesse" {% if query %} value="{{ query }}" {% endif %}>
-              <button class="btn btn-primary ml-1 ml-md-2" type="submit"><i class="fas fa-search fa-fw"></i><span class="d-none d-sm-inline"> Cerca</span></button>
-              <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-1 ml-md-2"><i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span></a>
+              <button class="btn btn-primary ml-2" type="submit"><i class="fas fa-search fa-fw"></i><span class="d-none d-sm-inline"> Cerca</span></button>
+              <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-2"><i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span></a>
             </div>
           </div>
-          <div class="col-md-2 col-xs-12 mb-1 mb-md-3 order-1 order-md-2">
+          <div class="col-md-2 col-xs-12 mb-3 order-1 order-md-2">
             {% if user|is_rilevatore %}
             <a class="btn btn-primary btn-block" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
             {% endif %}
