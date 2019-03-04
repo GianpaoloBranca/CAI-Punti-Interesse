@@ -82,19 +82,23 @@
       <h1>{{ punto.nome }}</h1>
       <h5>{{ punto.categoria }} - {{ punto.sottocategoria }}</h5>
       <hr>
-      {{ punto.descr_breve|markup|safe }} <br><br>
-      {% if punto.visitabile %}
-        <i class="fas fa-check fa-fw"></i> Visitabile
-      {% else %}
-        <i class="fas fa-times fa-fw"></i> Non visitabile
-      {% endif %}
-      <br>
-      {% if punto.visitabile2 %}
-        <i class="fas fa-check fa-fw"></i> Visitabile per persone con ridotta capacità motoria o sensoriale
-      {% else %}
-        <i class="fas fa-times fa-fw"></i> Non visitabile per persone con ridotta capacità motoria o sensoriale
-      {% endif %}
-      <br><br>
+      <p>{{ punto.descr_breve|markup|safe }}</p>
+      <ul class="list-unstyled">
+        <li>
+        {% if punto.visitabile %}
+          <i class="fas fa-check fa-fw"></i> Visitabile
+        {% else %}
+          <i class="fas fa-times fa-fw"></i> Non visitabile
+        {% endif %}
+        </li>
+        <li>
+        {% if punto.visitabile2 %}
+          <i class="fas fa-check fa-fw"></i> Visitabile per persone con ridotta capacità motoria o sensoriale
+        {% else %}
+          <i class="fas fa-times fa-fw"></i> Non visitabile per persone con ridotta capacità motoria o sensoriale
+        {% endif %}
+        </li>
+      </ul>
       <dl class="row">
         <dt class="col-sm-5">Coordinate</dt>
         <dd class="col-sm-7">{{ punto.latitudine }} ; {{ punto.longitudine }}</dd>
