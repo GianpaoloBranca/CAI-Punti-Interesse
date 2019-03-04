@@ -11,23 +11,50 @@
 
 {% if punto %}
 <main role="main" class="container">
+  <div class="mb-2">
+    <a class="btn btn-primary" href="{% url 'home' %}">
+      <i class="fas fa-home fa-fw"></i><span class="d-none d-sm-inline"> Elenco</span>
+    </a>
+    <button class="btn btn-primary" onclick="document.getElementById('id_copertina').click();">
+      <i class="fas fa-images fa-fw"></i><span class="d-none d-sm-inline"> Galleria</span>
+    </button>
+    {% if user|is_rilevatore %}
+    <a class="btn btn-primary" href="{% url 'edit' punto.slug %}">
+      <i class="fas fa-edit fa-fw"></i><span class="d-none d-sm-inline"> Modifica</span>
+    </a>
+    {% endif %}
+    {% if user|is_validatore %}
+    <div class="pt-2 d-inline">
+      <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
+        {% if punto.validato %}
+        <i class="fas fa-edit fa-fw"></i><span class="d-none d-sm-inline"> Modifica Validazione</span>
+        {% else %}
+        <i class="fas fa-check-circle fa-fw"></i><span class="d-none d-sm-inline"> Valida</span>
+        {% endif %}
+      </a>
+    </div>
+    {% endif %}
+  </div>
   {% if not punto.validato %}
     <div class="alert alert-info" role="alert">
       <i class="fas fa-exclamation-triangle"></i>
       {% if val %}
-       La validazione di questo punto di interesse è scaduta
+      <span class="d-none d-sm-inline"> La validazione di questo punto di interesse è scaduta</span>
+      <span class="d-inline d-sm-none"> Validazione scaduta</span>
       {% else %}
-       Questo punto di interesse non è ancora stato validato
+      <span class="d-none d-sm-inline"> Questo punto di interesse non è ancora stato validato</span>
+      <span class="d-inline d-sm-none"> Validazione mancante</span>
       {% endif %}
     </div>
   {% endif %}
+
   <div class="row">
     <div class="col-md-6 order-2 order-md-1">
       {% if punto.foto_copertina %}
       <img class="img-fluid rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
       <div class="row m-0 py-2 px-1 mt-2 rounded" style="background-color:#e1e8f0">
         <div class="col-2 px-1">
-          <a href="{{ MEDIA_URL }}{{ punto.foto_copertina }}" data-toggle="lightbox" data-gallery="example-gallery">
+          <a href="{{ MEDIA_URL }}{{ punto.foto_copertina }}" data-toggle="lightbox" data-gallery="example-gallery" id="id_copertina">
             <img class="img-gallery rounded" src="{{ MEDIA_URL }}{{ punto.foto_copertina }}" alt="Immagine non trovata">
           </a>
         </div>
@@ -52,26 +79,8 @@
       <p>{{ punto.descr_sito|markup|safe }}</p>
     </div>
     <div class="col-md-6 order-1 order-md-2">
-      <span class="h1">{{ punto.nome }}</span>
-      {% if user|is_rilevatore %}
-        <div class="float-right pt-2 d-inline">
-          <a class="btn btn-primary" href="{% url 'edit' punto.slug %}"><i class="fas fa-edit"></i> Modifica</a>
-        </div>
-      {% endif %}
-      {% if user|is_validatore %}
-        <div class="float-right pt-2 d-inline">
-          <a class="btn btn-primary" href="{% url 'validate' punto.slug %}">
-            {% if punto.validato %}
-            <i class="fas fa-edit"></i> Modifica Validazione
-            {% else %}
-            <i class="fas fa-check-circle"></i> Valida
-            {% endif %}
-          </a>
-        </div>
-      {% endif %}
-      <br>
-      {{ punto.categoria }} -
-      {{ punto.sottocategoria }} <br>
+      <h1>{{ punto.nome }}</h1>
+      <h5>{{ punto.categoria }} - {{ punto.sottocategoria }}</h5>
       <hr>
       {{ punto.descr_breve|markup|safe }} <br><br>
       {% if punto.visitabile %}
