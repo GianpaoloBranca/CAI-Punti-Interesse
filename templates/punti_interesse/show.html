@@ -6,11 +6,24 @@
   <link rel="stylesheet" href = "{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
 {% endblock links %}
 
-
 {% block main %}
 
 {% if punto %}
 <main role="main" class="container">
+
+    {% if not punto.validato %}
+    <div class="alert alert-info" role="alert">
+      <i class="fas fa-exclamation-triangle"></i>
+      {% if val %}
+      <span class="d-none d-sm-inline"> La validazione di questo punto di interesse è scaduta</span>
+      <span class="d-inline d-sm-none"> Validazione scaduta</span>
+      {% else %}
+      <span class="d-none d-sm-inline"> Questo punto di interesse non è ancora stato validato</span>
+      <span class="d-inline d-sm-none"> Validazione mancante</span>
+      {% endif %}
+    </div>
+  {% endif %}
+
   <a class="btn btn-secondary" href="{% url 'home' %}">
     <i class="fas fa-home fa-fw"></i><span class="d-none d-sm-inline"> Elenco</span>
   </a>
@@ -32,18 +45,6 @@
       {% endif %}
     </a>
   </div>
-  {% endif %}
-  {% if not punto.validato %}
-    <div class="alert alert-info" role="alert">
-      <i class="fas fa-exclamation-triangle"></i>
-      {% if val %}
-      <span class="d-none d-sm-inline"> La validazione di questo punto di interesse è scaduta</span>
-      <span class="d-inline d-sm-none"> Validazione scaduta</span>
-      {% else %}
-      <span class="d-none d-sm-inline"> Questo punto di interesse non è ancora stato validato</span>
-      <span class="d-inline d-sm-none"> Validazione mancante</span>
-      {% endif %}
-    </div>
   {% endif %}
   <hr>
   <div class="row">
