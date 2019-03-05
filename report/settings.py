@@ -144,7 +144,8 @@ MEDIA_URL = '/media/'
 
 # Login
 
-LOGIN_URL = '/pi/login/'
+LOGIN_URL = '/accounts/cas-login'
+#LOGIN_URL = '/login/'
 
 # CAS
 
@@ -153,4 +154,4 @@ AUTHENTICATION_BACKENDS = [
     'django_cas_ng.backends.CASBackend',
 ]
 
-CAS_SERVER_URL = 'https://prova.cai.it/cai-cas'
+CAS_SERVER_URL = 'https://prova.cai.it/cai-cas/'
