@@ -155,3 +155,10 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CAS_SERVER_URL = 'https://prova.cai.it/cai-cas/'
+
+CAS_RENAME_ATTRIBUTES = {
+    'lastname' : 'last_name',
+    'firstname' : 'first_name',
+}
+
+CAS_APPLY_ATTRIBUTES_TO_USER = True
