@@ -146,13 +146,26 @@
         </div>
       </div>
       <p><i>
-        Validazione eseguita da <b>{{ val.validatore }}</b>. Aggiornata al<b> {{ val.data_aggiornamento }}</b>
+        Validazione eseguita da<b>
+          {% if val.validatore %}
+            {{ val.validatore.first_name }} {{ val.validatore.last_name }}
+          {% else %}
+            [rimosso]
+          {% endif %}
+          </b>. Aggiornata al <b>{{ val.data_aggiornamento }}</b>
       </i></p>
     </div>
   </div>
   {% endif %}
   <br>
-  <p><i>Punto di interesse rilevato da<b> {{ punto.rilevatore }}</b>. Aggiornato al <b>{{ punto.data }}</b></i></p>
+  <p><i>Punto di interesse rilevato da<b>
+    {% if punto.rilevatore %}
+      {{ punto.rilevatore.first_name }} {{ punto.rilevatore.last_name }}
+    {% else %}
+      [rimosso]
+    {% endif %}
+    </b>. Aggiornato al <b>{{ punto.data }}</b>
+  </i></p>
 </main>
 {% else %}
 Errore! Punto di intersse mancante.

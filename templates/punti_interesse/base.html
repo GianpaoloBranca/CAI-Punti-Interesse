@@ -32,8 +32,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-          <a class="nav-link text-light disabled" href="#"><i class="fas fa-user fa-fw"></i> {{ user.username }}</a>
-          <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
+          <a class="nav-link text-light disabled" href="#"><i class="fas fa-user fa-fw"></i> {{ user.last_name }} {{ user.first_name }}</a>
+          <a class="nav-link text-light" href="{% url 'cas_ng_logout' %}"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</a>
         </div>
       </div>
       {% endif %}
