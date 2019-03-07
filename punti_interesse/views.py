@@ -37,6 +37,7 @@ def logout(request):
 
 @login_required
 def home(request):
+
     query = request.GET.get('nome')
     if query:
         lista_punti = PuntoInteresse.objects.filter(nome__icontains=query).order_by('data')
@@ -71,7 +72,7 @@ def new(request):
 
         if form.is_valid() and fotoformset.is_valid():
             punto = form.save(commit=False)
-            punto.rilevatore = request.user.username
+            punto.rilevatore = request.user
             punto.save()
             save_fotos(fotoformset, punto)
             return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
@@ -132,7 +133,7 @@ def validate(request, slug):
         if form.is_valid():
             val = form.save(commit=False)
             val.punto = punto
-            val.validatore = request.user.username
+            val.validatore = request.user
             val.save()
             punto.validato = True
             punto.save()

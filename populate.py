@@ -8,6 +8,7 @@ django.setup()
 # pylint: disable=wrong-import-position
 from punti_interesse.models import *
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import Group
 
 def populate():
 
@@ -17,6 +18,7 @@ def populate():
     qualita = ['Raro', 'Esemplificativo', 'Rappresentativo', 'Endemico']
     estensione = ['Locale', 'Regionale', 'Nazionale', 'Internazionale']
     stati_conservazione = ['Povero', 'Normale', 'Buono'] # valori temporanei
+    groups = ['Rilevatore', 'Validatore']
 
     categorie = {
         'Interesse culturale' : int_cult,
@@ -38,8 +40,8 @@ def populate():
         for subcat in subcats:
             add_subcat(categoria, subcat)
 
-    #TODO add groups
-
+    for group in groups:
+        add_group(group)
 
 def add_cat(descr):
     cat = TipoInteresse.objects.get_or_create(descrizione=descr)[0]
@@ -65,6 +67,11 @@ def add_statoconservazione(descr):
     stato = StatoConservazione.objects.get_or_create(descrizione=descr)[0]
     stato.save()
     return stato
+
+def add_group(name):
+    group = Group.objects.get_or_create(name=name)[0]
+    group.save()
+    return group
 
 def add_point(fields):
     punto = PuntoInteresse(fields)

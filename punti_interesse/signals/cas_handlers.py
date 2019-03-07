@@ -15,14 +15,16 @@ def cas_login_callback(sender, **kwargs):
 
     if attributes:
 
+        uuid = attributes.get('uuid')
         email = attributes.get('email')
         roles = attributes.get('roles')
 
-        if email:
-            user, _ = User.objects.get_or_create(username=email)
+        if email and uuid:
+
+            user, _ = User.objects.get_or_create(username=uuid)
+            user.email = email
             user.first_name = attributes.get('firstname', '')
             user.last_name = attributes.get('lastname', '')
-            user.email = email
 
             user.groups.clear()
             if roles:
