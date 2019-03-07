@@ -38,6 +38,8 @@ def populate():
         for subcat in subcats:
             add_subcat(categoria, subcat)
 
+    #TODO add groups
+
 
 def add_cat(descr):
     cat = TipoInteresse.objects.get_or_create(descrizione=descr)[0]
