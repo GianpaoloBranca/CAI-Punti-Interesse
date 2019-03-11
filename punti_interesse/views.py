@@ -93,7 +93,7 @@ def new(request):
 def edit(request, slug):
     punto = get_pi(slug)
 
-    if punto.rilevatore != request.user:
+    if punto.rilevatore.username != request.user.username:
         return HttpResponseForbidden()
 
     fotos = FotoAccessoria.objects.filter(punto=punto.id)

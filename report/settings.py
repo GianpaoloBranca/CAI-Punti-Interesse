@@ -157,4 +157,11 @@ AUTHENTICATION_BACKENDS = [
 CAS_SERVER_URL = 'https://prova.cai.it/cai-cas/'
 
 # Handle this in cas_user_authenticated signal
-CAS_CREATE_USER = False
+CAS_CREATE_USER = True
+CAS_CREATE_USER_WITH_ID = True
+
+CAS_RENAME_ATTRIBUTES = {
+    'uid' : 'id'
+}
+
+# CAS_USERNAME_ATTRIBUTE = 'uuid'

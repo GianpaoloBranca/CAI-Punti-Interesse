@@ -9,19 +9,17 @@ def cas_login_callback(sender, **kwargs):
 
     attributes = kwargs.get('attributes')
 
-    if report.settings.DEBUG:
-        print('login successful')
-        print(attributes)
-
     if attributes:
 
+        uid = attributes.get('id')
         uuid = attributes.get('uuid')
         email = attributes.get('email')
         roles = attributes.get('roles')
 
-        if email and uuid:
+        if email and uuid and uid:
 
-            user, _ = User.objects.get_or_create(username=uuid)
+            user = User.objects.get(id=uid)
+            user.username = uuid
             user.email = email
             user.first_name = attributes.get('firstname', '')
             user.last_name = attributes.get('lastname', '')
