@@ -28,7 +28,7 @@ SECRET_KEY = 'ic60t%7t%7f_#)1efev^$6k6)9u0w#s@6p%+ze$)t@b1pps(qh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -156,12 +156,9 @@ AUTHENTICATION_BACKENDS = [
 
 CAS_SERVER_URL = 'https://prova.cai.it/cai-cas/'
 
-# Handle this in cas_user_authenticated signal
 CAS_CREATE_USER = True
 CAS_CREATE_USER_WITH_ID = True
 
 CAS_RENAME_ATTRIBUTES = {
     'uid' : 'id'
 }
-
-# CAS_USERNAME_ATTRIBUTE = 'uuid'
