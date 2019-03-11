@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, TipoInteresse
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
@@ -37,7 +37,6 @@ def logout(request):
 
 @login_required
 def home(request):
-
     query = request.GET.get('nome')
     if query:
         lista_punti = PuntoInteresse.objects.filter(nome__icontains=query).order_by('data')
@@ -49,14 +48,16 @@ def home(request):
 @login_required
 def show(request, slug):
     punto = get_pi(slug)
+    val = get_val(punto)
 
     if not punto:
         return render(request, '404.html', status=404)
 
     context_dict = {}
     context_dict['punto'] = punto
-    context_dict['val'] = get_val(punto)
+    context_dict['val'] = val
     context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
+    context_dict['ril_owner'] = punto.rilevatore == request.user
     return render(request, 'punti_interesse/show.html', context_dict)
 
 @login_required
@@ -90,8 +91,11 @@ def new(request):
 @login_required
 @user_passes_test(is_rilevatore)
 def edit(request, slug):
-
     punto = get_pi(slug)
+
+    if punto.rilevatore != request.user:
+        return HttpResponseForbidden()
+
     fotos = FotoAccessoria.objects.filter(punto=punto.id)
 
     FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5, can_delete=True)
@@ -124,7 +128,7 @@ def validate(request, slug):
     punto = get_pi(slug)
 
     if not punto:
-        render(request, '404.html', status=404)
+        return render(request, '404.html', status=404)
 
     val = get_val(punto)
 
