@@ -158,6 +158,11 @@ def export_csv(request):
     response['Content-Disposition'] = 'attachment; filename="punti.csv"'
     return response
 
+@staff_member_required
+def remove_invalid_points(request):
+    PuntoInteresse.objects.filter(validato=False).delete()
+    return HttpResponseRedirect(reverse('home'))
+
 def load_subcategories(request):
     categoria = request.GET.get('categoria')
     if categoria != '':

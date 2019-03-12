@@ -19,7 +19,18 @@
             <a class="btn btn-primary btn-block" href="{% url 'new' %}"><i class="fas fa-plus"></i> Nuovo</a>
             {% endif %}
             {% if user.is_staff %}
-            <a class="btn btn-primary btn-block" href="{% url 'export' %}"><i class="fas fa-file-export"></i> Esporta</a>
+            <div class="dropdown">
+              <button class="btn btn-primary btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Azioni
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'export' %}"><i class="fas fa-file-download fa-fw"></i> Esporta come CSV</a>
+                <a class="dropdown-item text-danger" href="{% url 'remove_invalid_points' %}"
+                    onclick="return confirm('Verranno eliminati tutti i Punti di Interesse con validazione scaduta o assente. Proseguire?')">
+                  <i class="fas fa-trash-alt fa-fw"></i> Elimina Punti invalidi
+                </a>
+              </div>
+            </div>
             {% endif %}
           </div>
         </div>
