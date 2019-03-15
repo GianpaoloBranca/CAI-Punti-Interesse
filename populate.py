@@ -29,19 +29,29 @@ def populate():
     for qual in qualita:
         add_qualita(qual)
 
+    print("Aggiunte qualita")
+
     for est in estensione:
         add_estensione(est)
 
+    print("Aggiunte estensioni")
+
     for stato in stati_conservazione:
         add_statoconservazione(stato)
+
+    print("Aggiunti stati conservazione")
 
     for cat, subcats in categorie.items():
         categoria = add_cat(cat)
         for subcat in subcats:
             add_subcat(categoria, subcat)
 
+    print("Aggiunte categorie e sottocategorie")
+
     for group in groups:
         add_group(group)
+
+    print("Aggiunti gruppi")
 
 def add_cat(descr):
     cat = TipoInteresse.objects.get_or_create(descrizione=descr)[0]
@@ -74,39 +84,40 @@ def add_group(name):
     return group
 
 def add_point(fields):
-    punto = PuntoInteresse(fields)
-    punto.save()
+    punto = PuntoInteresse.objects.create(**fields)
     return punto
 
 def add_default_point():
     try:
-        default_point_fields = {
-            'longitudine' : 0.0,
-            'latitudine' : 0.0,
-            'categoria' : TipoInteresse.objects.get(descrizione='Interesse Culturale'),
-            'sottocategoria' : InteresseSpecifico.objects.get(descrizione='Borgo'),
-            'nome' : 'Punto Vuoto',
-            'localita' : '.',
-            'valle' : '.',
-            'qualita' : QualitaInteresse.objects.get(descrizione='Raro'),
-            'estensione' : EstensioneInteresse.objects.get(descrizione='Locale'),
-            'valenza' : '.',
-            'visitabile' : False,
-            'visitabile2' : False,
-            'periodo' : '.',
-            'istituto': '.',
-            'foto_copertina': '.',
-            'descr_breve' : '.',
-            'descr_estesa' : '.',
-            'descr_sit' : '.',
-            'motivo' : '.',
-            'rif_biblio' : '.',
-            'rif_sito' : '.',
-        }
-        add_point(default_point_fields)
-
+        return add_point(get_default_point_fields())
     except ObjectDoesNotExist:
         print("Missing objects in related tables. Did you forget to call populate() first?")
+
+def get_default_point_fields():
+    default_point_fields = {
+        'longitudine' : 0.0,
+        'latitudine' : 0.0,
+        'categoria' : TipoInteresse.objects.get(descrizione='Interesse culturale'),
+        'sottocategoria' : InteresseSpecifico.objects.get(descrizione='Borgo'),
+        'nome' : 'Punto Vuoto',
+        'localita' : '.',
+        'valle' : '.',
+        'qualita' : QualitaInteresse.objects.get(descrizione='Raro'),
+        'estensione' : EstensioneInteresse.objects.get(descrizione='Locale'),
+        'valenza' : '.',
+        'visitabile' : False,
+        'visitabile2' : False,
+        'periodo' : '.',
+        'istituto': '.',
+        'foto_copertina': '.',
+        'descr_breve' : '.',
+        'descr_estesa' : '.',
+        'descr_sito' : '.',
+        'motivo' : '.',
+        'rif_biblio' : '.',
+        'rif_sito' : '.',
+    }
+    return default_point_fields
 
 
 if __name__ == '__main__':

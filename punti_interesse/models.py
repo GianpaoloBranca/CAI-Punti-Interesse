@@ -2,7 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
-
+from django.core.exceptions import ValidationError
 from punti_interesse.validators import validate_degree, MaxSizeValidator
 
 class PuntoInteresse(models.Model):
@@ -45,6 +45,8 @@ class PuntoInteresse(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)
+        self.validate_unique()
+        self._check_categories_consistency()
         super(PuntoInteresse, self).save(*args, **kwargs)
 
     class Meta:
@@ -54,6 +56,9 @@ class PuntoInteresse(models.Model):
     def __str__(self):
         return self.nome
 
+    def _check_categories_consistency(self):
+        if self.sottocategoria.tipo != self.categoria:
+            raise ValidationError("Inconsistenza tra il tipo di interesse e l'interesse specifico")
 
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
