@@ -37,7 +37,7 @@ class PuntoInteresse(models.Model):
     rif_biblio = models.TextField(verbose_name='Riferimenti bibliografici', max_length=256, blank=True)
     rif_sito = models.TextField(verbose_name='Riferimenti sitografici', max_length=256, blank=True)
 
-    rilevatore = models.OneToOneField(User, verbose_name='Utente rilevatore', on_delete=models.SET_NULL, null=True)
+    rilevatore = models.ForeignKey(User, verbose_name='Utente rilevatore', on_delete=models.SET_NULL, null=True)
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
     validato = models.BooleanField(verbose_name='Validato', default=False)
@@ -58,7 +58,7 @@ class PuntoInteresse(models.Model):
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
 
-    validatore = models.OneToOneField(User, verbose_name='Utente validatore', on_delete=models.SET_NULL, null=True)
+    validatore = models.ForeignKey(User, verbose_name='Utente validatore', on_delete=models.SET_NULL, null=True)
 
     descrizione = models.TextField(verbose_name='Descrizione', max_length=256)
     data = models.DateField(verbose_name='Data validazione', auto_now=True)
