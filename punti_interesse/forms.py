@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, InteresseSpecifico
 
 class PuntoInteresseForm(forms.ModelForm):
@@ -22,8 +23,15 @@ class PuntoInteresseForm(forms.ModelForm):
             categoria = self.instance.categoria.id
             self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.filter(tipo=categoria)
 
+    def clean_nome(self):
+        nome = self.cleaned_data['nome']
+        slug = slugify(nome)
+        if PuntoInteresse.objects.exclude(id=self.instance.id).filter(slug=slug):
+            raise forms.ValidationError("Nome già utilizzato.")
+        return nome
+
     def clean(self):
-        cleaned_data = super().clean()
+        cleaned_data = super(PuntoInteresseForm, self).clean()
         visitabile = cleaned_data.get('visitabile')
         visitabile2 = cleaned_data.get('visitabile2')
 
