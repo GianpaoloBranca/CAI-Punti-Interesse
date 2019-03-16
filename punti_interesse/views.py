@@ -7,7 +7,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
-from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, TipoInteresse
+from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 from punti_interesse.utils import Echo, csv_iterator
@@ -68,7 +68,7 @@ def new(request):
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES)
-        # pylint: disable=E1123
+        # pylint: disable=unexpected-keyword-arg
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=FotoAccessoria.objects.none())
 
         if form.is_valid() and fotoformset.is_valid():
@@ -80,7 +80,7 @@ def new(request):
 
     else:
         form = PuntoInteresseForm()
-        # pylint: disable=E1123
+        # pylint: disable=unexpected-keyword-arg
         fotoformset = FotoFormSet(queryset=FotoAccessoria.objects.none())
 
     context_dict = {}
@@ -102,7 +102,7 @@ def edit(request, slug):
 
     if request.method == 'POST':
         form = PuntoInteresseForm(request.POST, files=request.FILES, instance=punto)
-        # pylint: disable=E1123
+        # pylint: disable=unexpected-keyword-arg
         fotoformset = FotoFormSet(request.POST, files=request.FILES, queryset=fotos)
 
         if form.is_valid() and fotoformset.is_valid():
@@ -113,7 +113,7 @@ def edit(request, slug):
             return HttpResponseRedirect(reverse('show', kwargs={'slug': punto.slug}))
     else:
         form = PuntoInteresseForm(instance=punto)
-        # pylint: disable=E1123
+        # pylint: disable=unexpected-keyword-arg
         fotoformset = FotoFormSet(queryset=fotos)
 
     context_dict = {}

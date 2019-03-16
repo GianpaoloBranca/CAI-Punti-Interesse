@@ -21,7 +21,7 @@ class PuntoInteresseTest(TestCase):
         punto2.nome = 'Altro punto'
         punto2.save()
 
-    def test_category_consistency(self):
+    def test_subcategory_consistency(self):
         """La sottocategoria di un punto deve appartenere alla sua categoria"""
         self.punto.categoria = TipoInteresse.objects.get(descrizione='Interesse culturale')
         self.punto.sottocategoria = InteresseSpecifico.objects.get(descrizione='Frana')
