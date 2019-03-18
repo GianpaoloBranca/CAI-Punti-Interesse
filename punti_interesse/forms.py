@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, InteresseSpecifico
+from countable_field.widgets import CountableWidget
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -50,12 +51,12 @@ class PuntoInteresseForm(forms.ModelForm):
             'foto_copertina',
         )
         widgets = {
-            'descr_estesa' : forms.Textarea(attrs={'rows':8, 'cols':40}),
-            'descr_breve' : forms.Textarea(attrs={'rows':4, 'cols':40}),
-            'descr_sito' : forms.Textarea(attrs={'rows':4, 'cols':40}),
-            'motivo' : forms.Textarea(attrs={'rows':2, 'cols':40}),
-            'rif_biblio' : forms.Textarea(attrs={'rows':2, 'cols':40}),
-            'rif_sito' : forms.Textarea(attrs={'rows':2, 'cols':40}),
+            'descr_estesa'  : CountableWidget(attrs={'rows':8, 'cols':40}),
+            'descr_breve'   : CountableWidget(attrs={'rows':4, 'cols':40}),
+            'descr_sito'    : CountableWidget(attrs={'rows':4, 'cols':40}),
+            'motivo'        : CountableWidget(attrs={'rows':2, 'cols':40}),
+            'rif_biblio'    : CountableWidget(attrs={'rows':2, 'cols':40}),
+            'rif_sito'      : CountableWidget(attrs={'rows':2, 'cols':40})
         }
 
 
