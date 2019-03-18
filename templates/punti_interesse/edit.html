@@ -1,7 +1,6 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
 {% load bootstrap4 %}
-{% load pi_template_tags %}
 
 {% block main %}
 {% if form %}
@@ -9,7 +8,7 @@
   <form id="id_form" method="POST" enctype="multipart/form-data" action="{% url 'edit' punto.slug %}"
     onsubmit="return confirm('Salvare il Punto di Interesse?\nATTENZIONE: l\'eventuale validazione presente sarà annullata.');"
     ajax_subcat_url="{% url 'ajax_load_subcategories' %}">
-    {% form_buttons %}
+    {% include 'punti_interesse/form_buttons.html' %}
     <hr>
     <h2 class="pb-3">{{ punto.nome }}</h2>
     {% bootstrap_form form layout='horizontal' size='small' %}
@@ -37,10 +36,11 @@
 <p>Form mancante</p>
 {% endif %}
 
-{% btn_scroll_top %}
+{% include 'top_scroll.html' %}
 
 {% endblock main %}
 
 {% block script %}
 <script src="{% static 'form_functions.js' %}"></script>
+{{ form.media }}
 {% endblock script %}

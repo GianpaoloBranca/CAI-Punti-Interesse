@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_cas_ng',
     'punti_interesse',
-    'countable_field',
+    'custom_widgets',
 ]
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'

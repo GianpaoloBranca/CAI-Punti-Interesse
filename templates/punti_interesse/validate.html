@@ -1,13 +1,12 @@
 {% extends 'punti_interesse/base.html' %}
 {% load staticfiles %}
 {% load bootstrap4 %}
-{% load pi_template_tags %}
 
 {% block main %}
 <div class="container">
 {% if form %}
   <form id="val-form" method="POST" action="{% url 'validate' punto.slug %}" onsubmit="return confirm('Procedere con la Validazione?');">
-    {% form_buttons %}
+    {% include 'punti_interesse/form_buttons.html' %}
     <hr>
     <h2 class="pb-2">Valida {{ punto.nome }}</h2>
     {% bootstrap_form form layout='horizontal' size='small' %}
@@ -18,3 +17,7 @@
 {% endif %}
 </div>
 {% endblock main %}
+
+{% block script %}
+{{ form.media }}
+{% endblock script %}
