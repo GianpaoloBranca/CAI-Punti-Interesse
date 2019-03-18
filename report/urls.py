@@ -26,7 +26,7 @@ from punti_interesse import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^pi/', include('punti_interesse.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls, name='admin'),
     # CAS URLs
     url(r'^accounts/cas-login$', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
     url(r'^accounts/cas-logout$', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),

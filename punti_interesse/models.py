@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from punti_interesse.validators import validate_degree, MaxSizeValidator
+from punti_interesse.validators import validate_degree, MaxSizeValidator, validate_punto_rilevatore
 
 class PuntoInteresse(models.Model):
     longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
@@ -37,17 +37,11 @@ class PuntoInteresse(models.Model):
     rif_biblio = models.TextField(verbose_name='Riferimenti bibliografici', max_length=256, blank=True)
     rif_sito = models.TextField(verbose_name='Riferimenti sitografici', max_length=256, blank=True)
 
-    rilevatore = models.ForeignKey(User, verbose_name='Utente rilevatore', on_delete=models.SET_NULL, null=True)
+    rilevatore = models.ForeignKey(User, verbose_name='Utente rilevatore', on_delete=models.SET_NULL, null=True, validators=[validate_punto_rilevatore])
 
     data = models.DateField(verbose_name='Data inserimento', auto_now=True)
     validato = models.BooleanField(verbose_name='Validato', default=False)
     slug = models.SlugField(unique=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.nome)
-        self.validate_unique()
-        self._check_categories_consistency()
-        super(PuntoInteresse, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Punto di Interesse'
@@ -56,9 +50,27 @@ class PuntoInteresse(models.Model):
     def __str__(self):
         return self.nome
 
-    def _check_categories_consistency(self):
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.nome)
+        super(PuntoInteresse, self).save(*args, **kwargs)
+
+    def clean(self):
+        self._check_unique_name()
+        self._check_subcategory_consistency()
+        self._check_visitability_consistency()
+
+    def _check_subcategory_consistency(self):
         if self.sottocategoria.tipo != self.categoria:
-            raise ValidationError("Inconsistenza tra il tipo di interesse e l'interesse specifico")
+            raise ValidationError({"sottocategoria" : "Questo campo non appartiene alla Tipologia corretta"})
+
+    def _check_unique_name(self):
+        slug = slugify(self.nome)
+        if PuntoInteresse.objects.exclude(id=self.id).filter(slug=slug):
+            raise ValidationError({"nome" : "Nome già utilizzato"})
+
+    def _check_visitability_consistency(self):
+        if not self.visitabile and self.visitabile2:
+            raise ValidationError({"visitabile2" : "Il punto di interesse non può essere visitabile solo per persone con disabilità"})
 
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)

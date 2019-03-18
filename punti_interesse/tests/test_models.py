@@ -1,4 +1,6 @@
+from unittest import skip
 from django.test import TestCase
+
 from django.core.exceptions import ValidationError
 
 from punti_interesse.models import PuntoInteresse, TipoInteresse, InteresseSpecifico
@@ -12,6 +14,7 @@ class PuntoInteresseTest(TestCase):
         populate()
         cls.punto = add_default_point()
 
+    @skip("La validazione a livello di form dovrebbe essere sufficiente")
     def test_unique_name(self):
         """Due punto con lo stesso nome, o con nome che genera lo stesso slug, non possono esistere"""
         punto2 = PuntoInteresse(**get_default_point_fields())
@@ -21,6 +24,7 @@ class PuntoInteresseTest(TestCase):
         punto2.nome = 'Altro punto'
         punto2.save()
 
+    @skip("La validazione a livello di form dovrebbe essere sufficiente")
     def test_subcategory_consistency(self):
         """La sottocategoria di un punto deve appartenere alla sua categoria"""
         self.punto.categoria = TipoInteresse.objects.get(descrizione='Interesse culturale')

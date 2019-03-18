@@ -23,21 +23,6 @@ class PuntoInteresseForm(forms.ModelForm):
             categoria = self.instance.categoria.id
             self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.filter(tipo=categoria)
 
-    def clean_nome(self):
-        nome = self.cleaned_data['nome']
-        slug = slugify(nome)
-        if PuntoInteresse.objects.exclude(id=self.instance.id).filter(slug=slug):
-            raise forms.ValidationError("Nome già utilizzato.")
-        return nome
-
-    def clean(self):
-        cleaned_data = super(PuntoInteresseForm, self).clean()
-        visitabile = cleaned_data.get('visitabile')
-        visitabile2 = cleaned_data.get('visitabile2')
-
-        if not visitabile and visitabile2:
-            raise forms.ValidationError("Il punto di interesse non può essere visitabile solo per persone con disabilità")
-
     class Meta:
         model = PuntoInteresse
         fields = (
