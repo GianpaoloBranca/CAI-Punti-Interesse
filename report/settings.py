@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.forms',
     'bootstrap4',
     'django_cas_ng',
+    'django_cleanup.apps.CleanupConfig',
     'punti_interesse',
     'custom_widgets',
 ]
