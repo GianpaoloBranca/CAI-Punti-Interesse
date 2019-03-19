@@ -65,7 +65,7 @@ class PuntoInteresse(models.Model):
 
     def _check_unique_name(self):
         slug = slugify(self.nome)
-        if PuntoInteresse.objects.exclude(id=self.id).filter(slug=slug):
+        if PuntoInteresse.objects.exclude(id=self.id).filter(slug=slug).exists():
             raise ValidationError({"nome" : "Nome già utilizzato"})
 
     def _check_visitability_consistency(self):

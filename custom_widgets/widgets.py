@@ -5,6 +5,3 @@ class CountableTextArea(Textarea):
 
     class Media:
         js = ('custom_widgets/CountableTextArea.js',)
-
-class ImageInput(Input):
-    template_name = 'custom_widgets/ImageInput.html'

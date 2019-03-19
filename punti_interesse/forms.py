@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.template.defaultfilters import slugify
+
 from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, InteresseSpecifico
 from custom_widgets.widgets import CountableTextArea
 
@@ -8,21 +8,6 @@ class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     latitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
     longitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.none()
-
-        # called when data submitted in POST
-        if 'categoria' in self.data:
-            try:
-                categoria = int(self.data.get('categoria'))
-                self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.filter(tipo=categoria)
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty queryset
-        elif self.instance.id:
-            categoria = self.instance.categoria.id
-            self.fields['sottocategoria'].queryset = InteresseSpecifico.objects.filter(tipo=categoria)
 
     class Meta:
         model = PuntoInteresse
