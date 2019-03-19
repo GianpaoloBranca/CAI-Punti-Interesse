@@ -1,5 +1,13 @@
+var initial;
+var loaded = false;
+
+$(document).ready( function(){
+    initial = $("#id_sottocategoria option:selected").val();
+    $('#id_categoria').trigger('change');
+});
+
 // AJAX for categories and subcategories
-$('#id_categoria').change(function() {
+$('#id_categoria').on("change", function() {
     var url = $("#id_form").attr("ajax_subcat_url");
     var cat_id = $(this).val();
 
@@ -10,6 +18,10 @@ $('#id_categoria').change(function() {
         },
         success: function (data) {
             $("#id_sottocategoria").html(data);
+            if(initial && !loaded) {
+                loaded = true;
+                $("#id_sottocategoria").val(initial).prop("selected", true);
+            }
         }
     });
 });
