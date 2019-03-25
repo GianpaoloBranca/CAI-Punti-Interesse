@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from django.forms.models import model_to_dict
-from punti_interesse.forms import PuntoInteresseForm
+from punti_interesse.forms import PuntoInteresseForm, ValidazioneForm
 from punti_interesse.models import TipoInteresse, InteresseSpecifico
 import populate
 
@@ -11,7 +11,6 @@ class PuntoInteresseFormTest(TestCase):
     def setUpTestData(cls):
         populate.populate()
         cls.punto = populate.add_default_point()
-        cls.form_args = {}
 
     def setUp(self):
         self.form_args = model_to_dict(self.punto)
@@ -52,3 +51,34 @@ class PuntoInteresseFormTest(TestCase):
         form = PuntoInteresseForm(self.form_args)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 2)
+
+
+class ValidazioneFormTest(TestCase):
+
+    def setUp(self):
+        self.form_args = {
+            'regione' : 'LOM',
+            'comunita_montana' : 'Qualsiasi',
+            'gruppo_montuoso' : 'Dolomiti',
+            'quota' : 1550,
+            'descrizione' : 'esempio'
+        }
+
+    def test_correct_data(self):
+        """Se i dati inseriti sono corretti il form deve essere valido"""
+        form = ValidazioneForm(self.form_args)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_quota(self):
+        """La quota inserita deve essere maggiore o uguale a zero"""
+        self.form_args['quota'] = -87
+        form = ValidazioneForm(self.form_args)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+
+    def test_invalid_regione(self):
+        """La regione deve essere una di quelle presenti"""
+        self.form_args['regione'] = 'MAH'
+        form = ValidazioneForm(self.form_args)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)

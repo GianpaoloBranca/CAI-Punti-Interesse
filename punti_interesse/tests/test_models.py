@@ -10,7 +10,6 @@ class PuntoInteresseTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        print("Preparazione dati per i test")
         populate()
         cls.punto = add_default_point()
 

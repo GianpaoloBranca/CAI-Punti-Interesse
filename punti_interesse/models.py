@@ -81,7 +81,30 @@ class ValidazionePunto(models.Model):
     data = models.DateField(verbose_name='Data validazione', auto_now=True)
     data_aggiornamento = models.DateField(verbose_name='Data aggiornamento', auto_now=True)
 
-    regione = models.CharField(verbose_name='Regione', max_length=64)
+    REGIONI = (
+        ("VDA", "Valle d'Aosta"),
+        ("PIE", "Piemonte"),
+        ("LOM", "Lombardia"),
+        ("TAA", "Trentino Alto Adige"),
+        ("VEN", "Veneto"),
+        ("FVG", "Friuli Venezia Giulia"),
+        ("LIG", "Liguria"),
+        ("ERM", "Emilia Romagna"),
+        ("TOS", "Toscana"),
+        ("UMB", "Umbria"),
+        ("MAR", "Marche"),
+        ("LAZ", "Lazio"),
+        ("ABR", "Abruzzo"),
+        ("MOL", "Molise"),
+        ("CAM", "Campania"),
+        ("BAS", "Basilicata"),
+        ("PUG", "Puglia"),
+        ("CAL", "Calabria"),
+        ("SIC", "Sicilia"),
+        ("SAR", "Sardegna")
+    )
+
+    regione = models.CharField(verbose_name='Regione', max_length=30, choices=REGIONI)
     comunita_montana = models.CharField(verbose_name='Comunità montana', max_length=128)
     gruppo_montuoso = models.CharField(verbose_name='Gruppo montuoso', max_length=128)
     quota = models.IntegerField(verbose_name='Quota', validators=[MinValueValidator(0)])
