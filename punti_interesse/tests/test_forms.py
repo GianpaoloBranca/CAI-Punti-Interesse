@@ -11,8 +11,11 @@ class PuntoInteresseFormTest(TestCase):
     def setUpTestData(cls):
         populate.populate()
         cls.punto = populate.add_default_point()
-        cls.form_args = model_to_dict(cls.punto)
-        cls.form_args['nome'] = 'Test point'
+        cls.form_args = {}
+
+    def setUp(self):
+        self.form_args = model_to_dict(self.punto)
+        self.form_args['nome'] = 'Test point'
 
     def test_correct_data(self):
         """Se i dati inseriti sono corretti il form deve essere valido"""
@@ -24,6 +27,7 @@ class PuntoInteresseFormTest(TestCase):
         self.form_args['nome'] = 'punto-vuoto' # esiste già un poi di nome "Punto Vuoto"
         form = PuntoInteresseForm(self.form_args)
         self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
 
     def test_subcategory_consistency(self):
         """La sottocategoria di un punto deve appartenere alla sua categoria"""
@@ -31,3 +35,20 @@ class PuntoInteresseFormTest(TestCase):
         self.form_args['sottocategoria'] = InteresseSpecifico.objects.get_or_create(descrizione='Frana')[0].id
         form = PuntoInteresseForm(self.form_args)
         self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+
+    def test_visitability_for_disable(self):
+        """Un punto di interesse non può essere visitabile solo da disabili"""
+        self.form_args['visitabile'] = False
+        self.form_args['visitabile2'] = True
+        form = PuntoInteresseForm(self.form_args)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+
+    def test_coordinates(self):
+        """Longitudine e latitudine devono avere un valore compreso tra -180 e 180"""
+        self.form_args['longitudine'] = 232.98
+        self.form_args['latitudine'] = -623.30
+        form = PuntoInteresseForm(self.form_args)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 2)
