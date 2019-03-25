@@ -29,29 +29,19 @@ def populate():
     for qual in qualita:
         add_qualita(qual)
 
-    print("Aggiunte qualita")
-
     for est in estensione:
         add_estensione(est)
 
-    print("Aggiunte estensioni")
-
     for stato in stati_conservazione:
         add_statoconservazione(stato)
-
-    print("Aggiunti stati conservazione")
 
     for cat, subcats in categorie.items():
         categoria = add_cat(cat)
         for subcat in subcats:
             add_subcat(categoria, subcat)
 
-    print("Aggiunte categorie e sottocategorie")
-
     for group in groups:
         add_group(group)
-
-    print("Aggiunti gruppi")
 
 def add_cat(descr):
     cat = TipoInteresse.objects.get_or_create(descrizione=descr)[0]
