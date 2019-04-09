@@ -57,7 +57,7 @@ def show(request, slug):
     context_dict['punto'] = punto
     context_dict['val'] = val
     context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
-    context_dict['ril_owner'] = punto.rilevatore == request.user
+    context_dict['ril_owner'] = punto.rilevatore.extra.uuid == request.user.extra.uuid
     return render(request, 'punti_interesse/show.html', context_dict)
 
 @login_required
@@ -93,7 +93,7 @@ def new(request):
 def edit(request, slug):
     punto = get_pi(slug)
 
-    if punto.rilevatore.username != request.user.username:
+    if punto.rilevatore.extra.uuid != request.user.extra.uuid:
         return HttpResponseForbidden()
 
     fotos = FotoAccessoria.objects.filter(punto=punto.id)

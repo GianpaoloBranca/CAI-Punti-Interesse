@@ -1,8 +1,8 @@
 from django_cas_ng.signals import cas_user_authenticated
+
 from django.dispatch import receiver
 from django.contrib.auth.models import User, Group
-from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
-import report.settings
+from punti_interesse.models import UserInfo
 
 @receiver(cas_user_authenticated)
 def cas_login_callback(sender, **kwargs):
@@ -11,6 +11,15 @@ def cas_login_callback(sender, **kwargs):
     user = kwargs.get('user')
 
     if attributes and user:
+
+        uuid = attributes.get('uuid', '')
+        sectioncode = attributes.get('sectioncode', 0)
+
+        try:
+            user.extra.uuid = uuid
+            user.extra.sectioncode = sectioncode
+        except UserInfo.DoesNotExist:
+            UserInfo.objects.create(user=user, uuid=uuid, sectioncode=sectioncode)
 
         roles = attributes.get('roles')
 

@@ -182,3 +182,16 @@ class FotoAccessoria(models.Model):
 
     def __str__(self):
         return str(self.punto)
+
+# Not sure it's needed
+class UserInfo(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='extra')
+    uuid = models.CharField(verbose_name='UUID', max_length=64)
+    sectioncode = models.IntegerField(verbose_name='Codice Sezione')
+
+    class Meta:
+        verbose_name = 'Informazioni Aggiuntive Utenti'
+        verbose_name_plural = 'Informazioni Aggiuntive Utenti'
+
+    def __str__(self):
+        return str(self.user)
