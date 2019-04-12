@@ -1,17 +1,20 @@
 {% extends 'punti_interesse/base.html' %}
 {% load pi_template_tags %}
+{% load staticfiles %}
+
+{% block links %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
+{% endblock links %}
+
 {% block main %}
 
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-12">
-      <form method="GET" action=".">
         <div class="form-row justify-content-between">
-          <div class="col-xs-12 col-md-8 col-lg-6 mb-3 order-2 order-md-1">
+          <div class="col-xs-12 col-md-6 col-lg-4 mb-3 order-2 order-md-1">
             <div class="input-group">
-              <input class="form-control rounded" name="nome" type="search" placeholder="Cerca punto di interesse" {% if query %} value="{{ query }}" {% endif %}>
-              <button class="btn btn-primary ml-2" type="submit"><i class="fas fa-search fa-fw"></i><span class="d-none d-sm-inline"> Cerca</span></button>
-              <a href="{% url 'home' %}" class="btn btn-secondary text-light ml-2"><i class="fas fa-redo fa-fw"></i><span class="d-none d-sm-inline"> Ripristina</span></a>
+              <input id="idsearch" class="form-control rounded" name="nome" type="search" placeholder="Cerca">
             </div>
           </div>
           <div class="col-md-2 col-xs-12 mb-3 order-1 order-md-2">
@@ -34,9 +37,8 @@
             {% endif %}
           </div>
         </div>
-      </form>
       {% if punti %}
-      <table class="table">
+      <table class="table" id="idtable">
       <thead>
         <tr>
         <th scope="col" style="width: 30%">Nome</th>
@@ -47,12 +49,14 @@
       </thead>
       <tbody>
       {% for punto in punti %}
+        <!-- contains hidden info :v / :n -->
         {% if punto.validato %}
         <tr>
+        <td><a class="text-reset" href="{% url 'show' punto.slug %}"><u>{{ punto.nome }}</u></a><span class="d-none">:v</span></td>
         {% else %}
         <tr class="table-info">
+        <td><a class="text-reset" href="{% url 'show' punto.slug %}"><u>{{ punto.nome }}</u></a><span class="d-none">:n</span></td>
         {% endif %}
-        <td><a class="text-reset" href="{% url 'show' punto.slug %}">{{ punto.nome }}</a></td>
         <td class="d-none d-md-table-cell">{{ punto.categoria }}</td>
         <td class="d-none d-md-table-cell">{{ punto.sottocategoria }}</td>
         <td class="d-none d-sm-table-cell">{{ punto.data }}</td>
@@ -68,3 +72,49 @@
 </main>
 
 {% endblock main %}
+
+{% block script %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="{% static 'third-party/moment/locale/it.js' %}" charset="UTF-8"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+<script>
+$(document).ready( function () {
+
+    $.fn.dataTable.moment('D MMMM YYYY', 'it');
+
+    oTable = $('#idtable').DataTable({
+      sDom :
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      language: {
+        "sEmptyTable":     "Nessun dato presente nella tabella",
+        "sInfo":           "Vista da _START_ a _END_ di _TOTAL_ elementi",
+        "sInfoEmpty":      "Vista da 0 a 0 di 0 elementi",
+        "sInfoFiltered":   "(filtrati da _MAX_ elementi totali)",
+        "sInfoPostFix":    "",
+        "sInfoThousands":  ".",
+        "sLengthMenu":     "Visualizza _MENU_ elementi",
+        "sLoadingRecords": "Caricamento...",
+        "sProcessing":     "Elaborazione...",
+        "sSearch":         "Cerca:",
+        "sZeroRecords":    "La ricerca non ha portato alcun risultato.",
+        "oPaginate": {
+            "sFirst":      "Inizio",
+            "sPrevious":   "Precedente",
+            "sNext":       "Successivo",
+            "sLast":       "Fine"
+        },
+        "oAria": {
+            "sSortAscending":  ": attiva per ordinare la colonna in ordine crescente",
+            "sSortDescending": ": attiva per ordinare la colonna in ordine decrescente"
+        }
+      }
+    });
+
+    $('#idsearch').keyup(function() {
+      oTable.search($(this).val()).draw();
+    })
+});
+</script>
+{% endblock script %}
