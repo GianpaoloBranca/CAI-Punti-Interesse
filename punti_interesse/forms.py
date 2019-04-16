@@ -1,13 +1,12 @@
 from django import forms
-from django.contrib.auth.models import User
 
-from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, InteresseSpecifico
+from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto
 from custom_widgets.widgets import CountableTextArea
 
 class PuntoInteresseForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-    latitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
-    longitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6)
+    latitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6, label='Latitudine*')
+    longitudine = forms.DecimalField(max_value=180, min_value=-180, max_digits=9, decimal_places=6, label='Longitudine*')
 
     class Meta:
         model = PuntoInteresse
@@ -53,7 +52,7 @@ class FotoAccessoriaForm(forms.ModelForm):
 
 
 class ValidazioneForm(forms.ModelForm):
-    quota = forms.IntegerField(min_value=0)
+    quota = forms.IntegerField(min_value=0, label='Quota*')
 
     class Meta:
         model = ValidazionePunto
@@ -64,10 +63,3 @@ class ValidazioneForm(forms.ModelForm):
             'quota',
             'descrizione',
         )
-
-
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-    class Meta:
-        model = User
-        fields = ('username', 'password',)
