@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as dj_login, logout as dj_lo
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
@@ -166,7 +166,7 @@ def load_subcategories(request):
         sottocategorie = InteresseSpecifico.objects.none()
     return render(request, 'punti_interesse/form_subcategory.html', {'sottocategorie' : sottocategorie})
 
-def handler404(request):
+def handler404(request, exception):
     return render(request, '404.html', status=404)
 
 def handler500(request):

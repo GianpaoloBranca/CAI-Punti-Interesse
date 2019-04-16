@@ -1,6 +1,6 @@
 from django.test import TestCase, RequestFactory, Client
 from django.contrib.auth.models import User, AnonymousUser
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from punti_interesse.views import home
 
 class ViewTest(TestCase):
