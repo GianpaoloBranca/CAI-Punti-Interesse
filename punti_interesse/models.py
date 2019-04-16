@@ -6,31 +6,31 @@ from django.core.exceptions import ValidationError
 from punti_interesse.validators import validate_degree, MaxSizeValidator, validate_punto_rilevatore
 
 class PuntoInteresse(models.Model):
-    longitudine = models.DecimalField(verbose_name='Longitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
-    latitudine = models.DecimalField(verbose_name='Latitudine', max_digits=9, decimal_places=6, validators=[validate_degree])
+    longitudine = models.DecimalField(verbose_name='Longitudine*', max_digits=9, decimal_places=6, validators=[validate_degree])
+    latitudine = models.DecimalField(verbose_name='Latitudine*', max_digits=9, decimal_places=6, validators=[validate_degree])
 
-    categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia', on_delete=models.PROTECT)
-    sottocategoria = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico', on_delete=models.PROTECT)
+    categoria = models.ForeignKey('TipoInteresse', verbose_name='Tipologia*', on_delete=models.PROTECT)
+    sottocategoria = models.ForeignKey('InteresseSpecifico', verbose_name='Oggetto Specifico*', on_delete=models.PROTECT)
 
-    nome = models.CharField(verbose_name='Nome', max_length=128)
-    localita = models.CharField(verbose_name='Località', max_length=128)
-    valle = models.CharField(verbose_name='Valle', max_length=128)
-    qualita = models.ForeignKey('QualitaInteresse', verbose_name='Qualità Interesse', on_delete=models.PROTECT)
-    estensione = models.ForeignKey('EstensioneInteresse', verbose_name='Estensione Interesse', on_delete=models.PROTECT)
+    nome = models.CharField(verbose_name='Nome*', max_length=50)
+    localita = models.CharField(verbose_name='Località*', max_length=75)
+    valle = models.CharField(verbose_name='Valle', max_length=75, blank=True)
+    qualita = models.ForeignKey('QualitaInteresse', verbose_name='Qualità Interesse*', on_delete=models.PROTECT)
+    estensione = models.ForeignKey('EstensioneInteresse', verbose_name='Estensione Interesse*', on_delete=models.PROTECT)
 
-    valenza = models.CharField(verbose_name='Titolo della valenza', max_length=128)
-    visitabile = models.BooleanField(verbose_name='Visitabile')
-    visitabile2 = models.BooleanField(verbose_name='Visitabile per persone con ridotta capacità motoria o sensoriale')
-    periodo = models.CharField(verbose_name='Periodo di visita consigliato', max_length=256)
-    istituto = models.CharField(verbose_name='Istituto di tutela', max_length=128)
+    valenza = models.CharField(verbose_name='Titolo della valenza*', max_length=30)
+    visitabile = models.BooleanField(verbose_name='Visitabile*')
+    visitabile2 = models.BooleanField(verbose_name='Visitabile per persone con ridotta capacità motoria o sensoriale*')
+    periodo = models.CharField(verbose_name='Periodo di visita consigliato', max_length=50, blank=True)
+    istituto = models.CharField(verbose_name='Istituto di tutela', max_length=50, blank=True)
 
-    foto_copertina = models.ImageField(verbose_name='Foto copertina', upload_to='foto_copertina/', null=True, blank=True, validators=[MaxSizeValidator(1)])
+    foto_copertina = models.ImageField(verbose_name='Foto copertina*', upload_to='foto_copertina/', validators=[MaxSizeValidator(2)])
 
-    descr_breve = models.TextField(verbose_name='Descrizione oggetto breve', max_length=256)
-    descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa', max_length=1024, blank=True)
-    descr_sito = models.TextField(verbose_name='Descrizione sito', max_length=256, blank=True)
+    descr_breve = models.TextField(verbose_name='Descrizione oggetto breve*', max_length=256)
+    descr_estesa = models.TextField(verbose_name='Descrizione oggetto estesa*', max_length=1024)
+    descr_sito = models.TextField(verbose_name='Descrizione sito*', max_length=256)
 
-    stato_conservazione = models.ForeignKey('StatoConservazione', verbose_name='Stato Conservazione', on_delete=models.PROTECT, default=2) # 2 = normale
+    stato_conservazione = models.ForeignKey('StatoConservazione', verbose_name='Stato Conservazione*', on_delete=models.PROTECT, default=2) # 2 = normale
 
     motivo = models.TextField(verbose_name='Motivo per la fruizione', max_length=256, blank=True)
 
@@ -72,16 +72,15 @@ class PuntoInteresse(models.Model):
         if not self.visitabile and self.visitabile2:
             raise ValidationError({"visitabile2" : "Il punto di interesse non può essere visitabile solo per persone con disabilità"})
 
+
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
-
     validatore = models.ForeignKey(User, verbose_name='Utente validatore', on_delete=models.SET_NULL, null=True)
 
-    descrizione = models.TextField(verbose_name='Descrizione', max_length=256)
-    data = models.DateField(verbose_name='Data validazione', auto_now=True)
+    descrizione = models.TextField(verbose_name='Descrizione*', max_length=256)
     data_aggiornamento = models.DateField(verbose_name='Data aggiornamento', auto_now=True)
 
-    REGIONI = (
+    LISTA_REGIONI = (
         ("VDA", "Valle d'Aosta"),
         ("PIE", "Piemonte"),
         ("LOM", "Lombardia"),
@@ -104,10 +103,11 @@ class ValidazionePunto(models.Model):
         ("SAR", "Sardegna")
     )
 
-    regione = models.CharField(verbose_name='Regione', max_length=30, choices=REGIONI)
-    comunita_montana = models.CharField(verbose_name='Comunità montana', max_length=128)
-    gruppo_montuoso = models.CharField(verbose_name='Gruppo montuoso', max_length=128)
-    quota = models.IntegerField(verbose_name='Quota', validators=[MinValueValidator(0)])
+    regione = models.CharField(verbose_name='Regione*', max_length=30, choices=LISTA_REGIONI)
+    comunita_montana = models.CharField(verbose_name='Comunità montana', max_length=128, blank=True)
+    gruppo_montuoso = models.ForeignKey('GruppoMontuoso', verbose_name='Gruppo Montuoso', on_delete=models.PROTECT, null=True, blank=True)
+
+    quota = models.DecimalField(verbose_name='Quota*', max_digits=4, decimal_places=0, validators=[MinValueValidator(0)])
 
     class Meta:
         verbose_name = 'Validazione Punto'
@@ -115,6 +115,7 @@ class ValidazionePunto(models.Model):
 
     def __str__(self):
         return str(self.punto)
+
 
 class TipoInteresse(models.Model):
     descrizione = models.CharField(verbose_name='Descrizione', max_length=128, unique=True)
@@ -182,6 +183,18 @@ class FotoAccessoria(models.Model):
 
     def __str__(self):
         return str(self.punto)
+
+
+class GruppoMontuoso(models.Model):
+    nome = models.CharField(verbose_name='Nome', max_length=50)
+
+    class Meta:
+        verbose_name = 'Gruppo Montuoso'
+        verbose_name_plural = 'Gruppi Montuosi'
+
+    def __str__(self):
+        return self.nome
+
 
 # Not sure it's needed
 class UserInfo(models.Model):

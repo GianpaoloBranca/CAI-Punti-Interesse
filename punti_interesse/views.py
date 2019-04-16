@@ -38,8 +38,7 @@ def logout(request):
 @login_required
 def home(request):
     lista_punti = PuntoInteresse.objects.order_by('data')
-    n_non_validati = PuntoInteresse.objects.filter(validato=False).count()
-    return render(request, 'punti_interesse/home.html', {'punti': lista_punti, 'n_non_validati' : n_non_validati})
+    return render(request, 'punti_interesse/home.html', {'punti': lista_punti})
 
 @login_required
 def show(request, slug):

@@ -3,7 +3,7 @@
 {% load pi_template_tags %}
 
 {% block links %}
-  <link rel="stylesheet" href = "{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
+  <link rel="stylesheet" href="{% static 'third-party/ekko-lightbox/ekko-lightbox.min.css' %}">
 {% endblock links %}
 
 {% block main %}
@@ -70,9 +70,9 @@
       <i class="fas fa-exclamation-triangle"></i> Nessuna foto disponibile.
       </div>
       {% endif %}
-      <h3 class="pt-2">Descrizione estesa</h3>
+      <h3 class="pt-2">Descrizione</h3>
       <p class="text-justify">{{ punto.descr_estesa|markup|safe }}</p>
-      <h4 class="pt-2">Descrizione sito</h4>
+      <h4 class="pt-2">Come si raggiunge</h4>
       <p>{{ punto.descr_sito|markup|safe }}</p>
     </div>
     <div class="col-md-6 order-1 order-md-2">
@@ -98,11 +98,11 @@
       </ul>
       <dl class="row">
         <dt class="col-sm-5">Coordinate</dt>
-        <dd class="col-sm-7">{{ punto.latitudine }} ; {{ punto.longitudine }}</dd>
+        <dd class="col-sm-7">{{ punto.latitudine|floatformat:6 }} ; {{ punto.longitudine|floatformat:6 }}</dd>
         <dt class="col-sm-5">Località</dt>
         <dd class="col-sm-7">{{ punto.localita }}</dd>
         <dt class="col-sm-5">Valle</dt>
-        <dd class="col-sm-7">{{ punto.valle }}</dd>
+        <dd class="col-sm-7">{{ punto.valle|default:"Nessuna" }}</dd>
         <dt class="col-sm-5">Qualità</dt>
         <dd class="col-sm-7">{{ punto.qualita }}</dd>
         <dt class="col-sm-5">Estensione</dt>
@@ -110,17 +110,17 @@
         <dt class="col-sm-5">Stato di conservazione</dt>
         <dd class="col-sm-7">{{ punto.stato_conservazione }}</dd>
         <dt class="col-sm-5">Periodo di visita</dt>
-        <dd class="col-sm-7">{{ punto.periodo }}</dd>
+        <dd class="col-sm-7">{{ punto.periodo|default:"Nessuna informazione" }}</dd>
         <dt class="col-sm-5">Valenza</dt>
         <dd class="col-sm-7">{{ punto.valenza }}</dd>
         <dt class="col-sm-5">Istituto di tutela</dt>
-        <dd class="col-sm-7">{{ punto.istituto }}</dd>
+        <dd class="col-sm-7">{{ punto.istituto|default:"Nessuno" }}</dd>
         <dt class="col-sm-5">Motivo della fruizione</dt>
-        <dd class="col-sm-7">{{ punto.motivo|markup|safe }}</dd>
+        <dd class="col-sm-7">{{ punto.motivo|markup|safe|default:"Nessun motivo specificato" }}</dd>
         <dt class="col-sm-5">Riferimenti bibliografici</dt>
-        <dd class="col-sm-7">{{ punto.rif_biblio|markup|safe }}</dd>
+        <dd class="col-sm-7">{{ punto.rif_biblio|markup|safe|default:"Nessun riferimento" }}</dd>
         <dt class="col-sm-5">Riferimenti sitografici</dt>
-        <dd class="col-sm-7">{{ punto.rif_sito|markup|safe }}</dd>
+        <dd class="col-sm-7">{{ punto.rif_sito|markup|safe|default:"Nessun riferimento" }}</dd>
       </dl>
     </div>
   </div>
@@ -137,9 +137,9 @@
             <dt class="col-sm-5">Regione</dt>
             <dd class="col-sm-7">{{ val.get_regione_display }}</dd>
             <dt class="col-sm-5">Comunità montana</dt>
-            <dd class="col-sm-7">{{ val.comunita_montana }}</dd>
+            <dd class="col-sm-7">{{ val.comunita_montana|default:"Nessuna" }}</dd>
             <dt class="col-sm-5">Gruppo montuoso</dt>
-            <dd class="col-sm-7">{{ val.gruppo_montuoso }}</dd>
+            <dd class="col-sm-7">{{ val.gruppo_montuoso|default_if_none:"Nessuno" }}</dd>
             <dt class="col-sm-5">Quota</dt>
             <dd class="col-sm-7">{{ val.quota }}</dd>
           </dl>
@@ -178,8 +178,8 @@ Errore! Punto di intersse mancante.
 <script src="{% static 'third-party/ekko-lightbox/ekko-lightbox.min.js' %}"></script>
 <script>
 $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-                event.preventDefault();
-                $(this).ekkoLightbox();
-            });
+    event.preventDefault();
+    $(this).ekkoLightbox();
+});
 </script>
 {% endblock script %}
