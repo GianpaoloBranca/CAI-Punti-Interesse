@@ -1,11 +1,10 @@
 from django.test import TestCase
-from django.contrib.auth.models import User, Group
 from django.forms.models import model_to_dict
+from django.core.files.uploadedfile import SimpleUploadedFile
 from punti_interesse.forms import PuntoInteresseForm, ValidazioneForm
 from punti_interesse.models import TipoInteresse, InteresseSpecifico
-
-from django.core.files.uploadedfile import SimpleUploadedFile
 import populate
+
 
 class PuntoInteresseFormTest(TestCase):
 
@@ -13,7 +12,7 @@ class PuntoInteresseFormTest(TestCase):
     def setUpTestData(cls):
         populate.populate()
         cls.punto = populate.add_default_point()
-        with open('media/foto_copertina/Boston_City_Flow.jpg', 'rb') as uploaded_image:
+        with open('static/images/placeholder.jpg', 'rb') as uploaded_image:
             cls.file_dict = {'foto_copertina' : SimpleUploadedFile(uploaded_image.name, uploaded_image.read(), content_type='image/jpeg')}
 
     def setUp(self):
