@@ -1,6 +1,6 @@
 from django import forms
 
-from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto
+from punti_interesse.models import PuntoInteresse, FotoAccessoria, ValidazionePunto, GruppoMontuoso
 from custom_widgets.widgets import CountableTextArea
 
 class PuntoInteresseForm(forms.ModelForm):
@@ -53,6 +53,10 @@ class FotoAccessoriaForm(forms.ModelForm):
 
 class ValidazioneForm(forms.ModelForm):
     quota = forms.IntegerField(min_value=0, label='Quota*')
+
+    def __init__(self, *args, **kwargs):
+        super(ValidazioneForm, self).__init__(*args, **kwargs)
+        self.fields['gruppo_montuoso'].queryset = GruppoMontuoso.objects.all().order_by('nome')
 
     class Meta:
         model = ValidazionePunto
