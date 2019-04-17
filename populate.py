@@ -114,7 +114,7 @@ def get_default_point_fields():
 
 def add_gruppi_montuosi(filepath):
     """Carica i gruppi montuosi nel db da un file csv"""
-    with open(filepath, newline='') as csvfile:
+    with open(filepath, 'r', encoding='latin-1') as csvfile:
         gm_reader = csv.reader(csvfile)
         next(gm_reader) # skip header line
 
