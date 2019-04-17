@@ -70,8 +70,8 @@
         <td class="d-none d-md-table-cell">Dolor</td>
         <td class="d-none d-sm-table-cell">1 Gennaio 2001</td>
         </tr>
-      {% endfor %}
-      -->
+      {% endfor %}-->
+
       </tbody>
       </table>
       {% else %}
@@ -96,6 +96,7 @@ $(document).ready( function () {
     oTable = $('#idtable').DataTable({
       pageLength : 10,
       sDom :
+        "<'row'<'col-sm-12 col-md-6 order-2 order-md-1'l><'col-sm-12 col-md-6 order-1 order-md-2'<'extra'>>>" +
         "<'row'<'col-sm-12'tr>>" +
         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
       language: {
@@ -126,6 +127,8 @@ $(document).ready( function () {
     $('#idsearch').keyup(function() {
       oTable.search($(this).val()).draw();
     })
+
+    $('div.extra').html("<p class='text-center text-md-right'>{{ n_valid }} Punti di interesse ({{ n_invalid }} non validati)</p>");
 });
 </script>
 {% endblock script %}
