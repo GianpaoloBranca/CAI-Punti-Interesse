@@ -18,9 +18,9 @@
   </head>
   <body style='padding-top:80px;'>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark py-0 shadow">
-      <a class="navbar-brand mx-3" href="#">
+      <span class="navbar-brand mx-3">
         <img src="{% static "images/logo_cai.png" %}" height="45" alt="">
-      </a>
+      </span>
       <!-- BEGIN Navbar sections and links -->
       <a class="navbar-brand" href="{% url 'home' %}">UnicoCAI Punti di Interesse</a>
       {% if user.is_authenticated %}
@@ -29,7 +29,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
-          <a class="nav-link text-light disabled" href="#"><i class="fas fa-user fa-fw"></i> {{ user.last_name }} {{ user.first_name }}</a>
+          <span class="nav-link text-light"><i class="fas fa-user fa-fw"></i> {{ user.last_name }} {{ user.first_name }}</span>
           {% if user.is_staff %}
           <a class="nav-link text-light" href="/admin"><i class="fas fa-tools fa-fw"></i> Amministrazione</a>
           {% endif %}

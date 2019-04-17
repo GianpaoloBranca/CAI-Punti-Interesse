@@ -11,7 +11,12 @@ def validate_degree(value):
 def validate_punto_rilevatore(uid):
     user = User.objects.get(id=uid)
     if not is_rilevatore(user) and not user.is_superuser:
-        raise ValidationError("Questo utente non può essere impostato come il rilevatore del punto di interesse")
+        raise ValidationError("Questo utente non può essere impostato come rilevatore")
+
+def validate_punto_validatore(uid):
+    user = User.objects.get(id=uid)
+    if not is_validatore(user) and not user.is_superuser:
+        raise ValidationError("Questo utente non può essere impostato come validatore")
 
 class MaxSizeValidator(MaxValueValidator):
     message = _('Il file eccede la dimensione massima di %(limit_value)s MB.')

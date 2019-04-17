@@ -4,7 +4,7 @@ from punti_interesse import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
 
-    # Non-CAS authentication views (to be removed soon)
+    # TODO: remove non-CAS authentication
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
 

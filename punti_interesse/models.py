@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from punti_interesse.validators import validate_degree, MaxSizeValidator, validate_punto_rilevatore
+from punti_interesse.validators import validate_degree, MaxSizeValidator, validate_punto_rilevatore, validate_punto_validatore
 
 class PuntoInteresse(models.Model):
     longitudine = models.DecimalField(verbose_name='Longitudine*', max_digits=9, decimal_places=6, validators=[validate_degree])
@@ -50,6 +50,7 @@ class PuntoInteresse(models.Model):
     def __str__(self):
         return self.nome
 
+    #pylint: disable=arguments-differ
     def save(self, *args, **kwargs):
         self.slug = slugify(self.nome)
         super(PuntoInteresse, self).save(*args, **kwargs)
@@ -75,7 +76,7 @@ class PuntoInteresse(models.Model):
 
 class ValidazionePunto(models.Model):
     punto = models.OneToOneField(PuntoInteresse, on_delete=models.CASCADE, primary_key=True)
-    validatore = models.ForeignKey(User, verbose_name='Utente validatore', on_delete=models.SET_NULL, null=True)
+    validatore = models.ForeignKey(User, verbose_name='Utente validatore', on_delete=models.SET_NULL, null=True, validators=[validate_punto_validatore])
 
     descrizione = models.TextField(verbose_name='Descrizione*', max_length=256)
     data_aggiornamento = models.DateField(verbose_name='Data aggiornamento', auto_now=True)
@@ -83,11 +84,11 @@ class ValidazionePunto(models.Model):
     LISTA_REGIONI = (
         ("VDA", "Valle d'Aosta"),
         ("PIE", "Piemonte"),
+        ("LIG", "Liguria"),
         ("LOM", "Lombardia"),
         ("TAA", "Trentino Alto Adige"),
         ("VEN", "Veneto"),
         ("FVG", "Friuli Venezia Giulia"),
-        ("LIG", "Liguria"),
         ("ERM", "Emilia Romagna"),
         ("TOS", "Toscana"),
         ("UMB", "Umbria"),
@@ -96,8 +97,8 @@ class ValidazionePunto(models.Model):
         ("ABR", "Abruzzo"),
         ("MOL", "Molise"),
         ("CAM", "Campania"),
-        ("BAS", "Basilicata"),
         ("PUG", "Puglia"),
+        ("BAS", "Basilicata"),
         ("CAL", "Calabria"),
         ("SIC", "Sicilia"),
         ("SAR", "Sardegna")

@@ -186,7 +186,7 @@ def get_val(punto):
     except ValidazionePunto.DoesNotExist:
         return None
 
-# TODO hack
+# TODO: hack
 def save_fotos(fotoformset, punto):
     for fotoform in fotoformset.cleaned_data:
         if fotoform:

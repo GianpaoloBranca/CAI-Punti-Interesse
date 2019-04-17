@@ -1,16 +1,17 @@
 from django.contrib import admin
 
-from punti_interesse.models import *
+from punti_interesse import models
 
 class PuntoInteresseAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('nome', )}
 
-admin.site.register(PuntoInteresse, PuntoInteresseAdmin)
-admin.site.register(ValidazionePunto)
-admin.site.register(FotoAccessoria)
-admin.site.register(TipoInteresse)
-admin.site.register(InteresseSpecifico)
-admin.site.register(QualitaInteresse)
-admin.site.register(EstensioneInteresse)
-admin.site.register(StatoConservazione)
-admin.site.register(UserInfo)
+admin.site.register(models.PuntoInteresse, PuntoInteresseAdmin)
+admin.site.register(models.ValidazionePunto)
+admin.site.register(models.FotoAccessoria)
+admin.site.register(models.TipoInteresse)
+admin.site.register(models.InteresseSpecifico)
+admin.site.register(models.QualitaInteresse)
+admin.site.register(models.EstensioneInteresse)
+admin.site.register(models.StatoConservazione)
+admin.site.register(models.GruppoMontuoso)
+admin.site.register(models.UserInfo)
