@@ -91,3 +91,10 @@ class ValidazioneFormTest(TestCase):
         form = ValidazioneForm(self.post_dict)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 1)
+
+    def test_invalid_gruppo_montuoso(self):
+        """Il gruppo montuoso scelto deve essere uno di quelli presenti"""
+        self.post_dict['gruppo_montuoso'] = -7
+        form = ValidazioneForm(self.post_dict)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
