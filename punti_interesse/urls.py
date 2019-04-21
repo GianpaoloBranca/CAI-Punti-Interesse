@@ -4,10 +4,6 @@ from punti_interesse import views
 urlpatterns = [
     url(r'^$', views.home, name='home'),
 
-    # TODO: remove non-CAS authentication
-    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
-
     # Admin only views
     url(r'^export/$', views.export_csv, name='export'),
     url(r'^remove-invalid-points/$', views.remove_invalid_points, name='remove_invalid_points'),

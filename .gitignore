@@ -3,3 +3,6 @@
 *.sqlite3
 media/
 env/
+htmlcov/
+.coverage
+runtests.sh

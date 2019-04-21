@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-md-12">
         <div class="form-row justify-content-between">
-          <div class="col-xs-12 col-md-6 col-lg-4 mb-4 order-2 order-md-1">
+          <div class="col-xs-12 col-md-6 col-lg-4 mb-3 order-2 order-md-1">
             <div class="input-group">
               <input id="idsearch" class="form-control" name="nome" type="search" placeholder="Cerca">
             </div>
@@ -96,9 +96,8 @@ $(document).ready( function () {
     oTable = $('#idtable').DataTable({
       pageLength : 10,
       sDom :
-        "<'row'<'col-sm-12 col-md-6 order-2 order-md-1'l><'col-sm-12 col-md-6 order-1 order-md-2'<'extra'>>>" +
         "<'row'<'col-sm-12'tr>>" +
-        "<'row'<'col justify-content-center'p>>",
+        "<'row'<'col-sm-12 col-md-5'<'extra'>><'col sm-12 col-md-7'p>>",
       language: {
         "sEmptyTable":     "Nessun dato presente nella tabella",
         "sInfo":           "Vista da _START_ a _END_ di _TOTAL_ elementi",
@@ -128,7 +127,7 @@ $(document).ready( function () {
       oTable.search($(this).val()).draw();
     })
 
-    $('div.extra').html("<p class='text-center text-md-right'>{{ n_valid }} Punti di interesse ({{ n_invalid }} non validati)</p>");
+    $('div.extra').html("<p class='text-center text-md-left'>{{ n_valid }} Punti di interesse ({{ n_invalid }} non validati)</p>");
 });
 </script>
 {% endblock script %}

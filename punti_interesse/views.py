@@ -1,39 +1,14 @@
 import csv
 from django.shortcuts import render
 from django.forms import modelformset_factory
-from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
-from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico
+from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, UserInfo
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 from punti_interesse.utils import Echo, csv_iterator
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-
-        if user and user.is_active:
-            dj_login(request, user)
-            return HttpResponseRedirect(reverse('home'))
-
-        else:
-            # Bad login details were provided. So we can't log the user in.
-            print("Invalid login details: {0}, {1}".format(username, password))
-            messages.warning(request, "Nome utente o password errati.")
-            return HttpResponseRedirect(request.path)
-
-    return render(request, 'punti_interesse/login.html')
-
-@login_required
-def logout(request):
-    dj_logout(request)
-    return HttpResponseRedirect(reverse('login'))
 
 @login_required
 def home(request):
@@ -45,16 +20,20 @@ def home(request):
 @login_required
 def show(request, slug):
     punto = get_pi(slug)
-    val = get_val(punto)
 
     if not punto:
         return render(request, '404.html', status=404)
+
+    val = get_val(punto)
 
     context_dict = {}
     context_dict['punto'] = punto
     context_dict['val'] = val
     context_dict['fotos'] = FotoAccessoria.objects.filter(punto=punto.id)
-    context_dict['ril_owner'] = punto.rilevatore.extra.uuid == request.user.extra.uuid
+    try:
+        context_dict['ril_owner'] = punto.rilevatore.extra.uuid == request.user.extra.uuid
+    except (AttributeError, UserInfo.DoesNotExist):
+        context_dict['ril_owner'] = False
     return render(request, 'punti_interesse/show.html', context_dict)
 
 @login_required
@@ -90,7 +69,10 @@ def new(request):
 def edit(request, slug):
     punto = get_pi(slug)
 
-    if punto.rilevatore.extra.uuid != request.user.extra.uuid:
+    try:
+        if punto.rilevatore.extra.uuid != request.user.extra.uuid:
+            return HttpResponseForbidden()
+    except (AttributeError, UserInfo.DoesNotExist):
         return HttpResponseForbidden()
 
     fotos = FotoAccessoria.objects.filter(punto=punto.id)
@@ -161,7 +143,7 @@ def remove_invalid_points(request):
     return HttpResponseRedirect(reverse('home'))
 
 def load_subcategories(request):
-    categoria = request.GET.get('categoria')
+    categoria = request.GET.get('categoria', '')
     if categoria != '':
         sottocategorie = InteresseSpecifico.objects.filter(tipo=categoria)
     else:

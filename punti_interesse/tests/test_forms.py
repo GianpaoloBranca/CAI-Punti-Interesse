@@ -55,6 +55,13 @@ class PuntoInteresseFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 2)
 
+    def test_foto_copertina_size_over_limit(self):
+        with open('static/images/big.jpg', 'rb') as uploaded_image:
+            self.file_dict = {'foto_copertina' : SimpleUploadedFile(uploaded_image.name, uploaded_image.read(), content_type='image/jpeg')}
+        form = PuntoInteresseForm(data=self.post_dict, files=self.file_dict)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(form.errors), 1)
+
 
 class ValidazioneFormTest(TestCase):
 
