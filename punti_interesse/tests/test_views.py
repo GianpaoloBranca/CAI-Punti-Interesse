@@ -1,8 +1,10 @@
+from unittest import skip
 from django.test import TestCase, RequestFactory, Client
 from django.contrib.auth.models import User, AnonymousUser, Group
+from django.forms.models import model_to_dict
 from django.urls import reverse
 from punti_interesse import views
-from punti_interesse.models import PuntoInteresse
+from punti_interesse.models import PuntoInteresse, UserInfo
 import populate
 
 class ViewTest(TestCase):
@@ -14,6 +16,7 @@ class ViewTest(TestCase):
         cls.group_v = Group.objects.get(name='Validatore')
         cls.factory = RequestFactory()
         cls.user = User.objects.create_user(username='user', password='secret')
+        UserInfo.objects.create(user=cls.user, uuid='oerinvqo', sectioncode=123)
         cls.request = cls.factory.get(reverse('home'))
         cls.punto = populate.add_default_point()
         cls.punto.rilevatore = cls.user
@@ -24,6 +27,8 @@ class ViewTest(TestCase):
         self.user_is_staff = False
         self.user.groups.clear()
         self.request.user = self.user
+
+    # ---------- Homepage -------------
 
     def test_home_access_granted(self):
         """Gli utenti registrati devono poter accedere all'applicazione"""
@@ -37,6 +42,8 @@ class ViewTest(TestCase):
         response.client = Client()
         self.assertRedirects(response, reverse('cas_ng_login') + '?next=' + reverse('home'), target_status_code=302)
 
+    # ---------- Show page ------------
+
     def test_show(self):
         """Se il punto esiste il server restituisce la pagina con tutte le sue informazioni"""
         response = views.show(self.request, self.punto.slug)
@@ -48,20 +55,70 @@ class ViewTest(TestCase):
         response = views.show(self.request, 'invalid-slug')
         self.assertEqual(response.status_code, 404)
 
+    # ---------- New page -------------
+
     def test_new(self):
         self.user.groups.add(self.group_r)
         response = views.new(self.request)
         self.assertEqual(response.status_code, 200)
 
-    def test_new_forbidden_access(self):
+    def test_new_user_is_not_rilevatore(self):
         response = views.new(self.request)
         response.client = Client()
         self.assertRedirects(response, reverse('cas_ng_login') + '?next=' + reverse('home'), target_status_code=302)
 
+    @skip('post requests seems problematic to test')
+    def test_new_post(self):
+        # Non usa la request della classe di test ma una diversa (post)
+        request = self.factory.post(reverse('new'))
+        post_dict = model_to_dict(self.punto)
+        post_dict['nome'] = 'nuovo nome'
+        request.POST = post_dict
+        with open('static/images/placeholder.jpg', 'rb') as uploaded_image:
+            request.FILES['foto_copertina'] = uploaded_image
+            request.FILES['foto_copertina'].read()
+        self.user.groups.add(self.group_r)
+        request.user = self.user
+        response = views.new(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(PuntoInteresse.objects.all().count(), 2)
+        PuntoInteresse.objects.get(nome='nuovo nome').delete()
+
+    # ---------- Edit page ------------
+
+    def test_edit(self):
+        self.user.groups.add(self.group_r)
+        response = views.edit(self.request, self.punto.slug)
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_user_is_not_owner(self):
+        self.user.groups.add(self.group_r)
+        self.user.extra.uuid = 'mismatch'
+        response = views.edit(self.request, self.punto.slug)
+        self.assertEqual(response.status_code, 403)
+
+    def test_edit_user_is_not_rilevatore(self):
+        response = views.edit(self.request, self.punto.slug)
+        response.client = Client()
+        self.assertRedirects(response, reverse('cas_ng_login') + '?next=' + reverse('home'), target_status_code=302)
+
+    def test_edit_punto_does_not_esists(self):
+        self.user.groups.add(self.group_r)
+        response = views.show(self.request, 'invalid-slug')
+        self.assertEqual(response.status_code, 404)
+
+    def test_edit_post_request(self):
+        pass
+
+    # ------- Validation page ---------
+
+
+
+    # ------- Admin functions ---------
+
     def test_remove_invalid_points(self):
         self.user.is_staff = True
         self.user.is_superuser = True
-        self.request.user = self.user
         response = views.remove_invalid_points(self.request)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(PuntoInteresse.objects.all().count(), 0)
@@ -73,7 +130,6 @@ class ViewTest(TestCase):
     def test_remove_invalid_points_but_point_is_valid(self):
         self.user.is_staff = True
         self.user.is_superuser = True
-        self.request.user = self.user
         self.punto.validato = True
         self.punto.save()
         response = views.remove_invalid_points(self.request)
@@ -86,7 +142,6 @@ class ViewTest(TestCase):
     def test_export_csv(self):
         self.user.is_staff = True
         self.user.is_superuser = True
-        self.request.user = self.user
         response = views.export_csv(self.request)
         self.assertEqual(response.get('Content-Type'), 'text/csv')
         self.assertEqual(response.get('Content-Disposition'), 'attachment; filename="punti.csv"')
@@ -95,6 +150,8 @@ class ViewTest(TestCase):
         iterator = views.csv_iterator()
         self.assertEqual(next(iterator), ('Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'))
         self.assertEqual(next(iterator), (self.punto.nome, self.punto.latitudine, self.punto.longitudine, str(self.punto.categoria), str(self.punto.sottocategoria)))
+
+    # ---------- Error pages ----------
 
     def test_error_404(self):
         response = views.handler404(self.request, None)
