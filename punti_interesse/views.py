@@ -69,6 +69,9 @@ def new(request):
 def edit(request, slug):
     punto = get_pi(slug)
 
+    if not punto:
+        return render(request, '404.html', status=404)
+
     try:
         if punto.rilevatore.extra.uuid != request.user.extra.uuid:
             return HttpResponseForbidden()
