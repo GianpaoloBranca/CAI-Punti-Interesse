@@ -1,18 +1,19 @@
 from django.conf.urls import url
+from django.urls import path
 from punti_interesse import views
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    path('', views.home, name='home'),
 
     # Admin only views
-    url(r'^export/$', views.export_csv, name='export'),
-    url(r'^remove-invalid-points/$', views.remove_invalid_points, name='remove_invalid_points'),
+    path('export/', views.export_csv, name='export'),
+    path('remove-invalid-points/', views.remove_invalid_points, name='remove_invalid_points'),
 
-    url(r'^nuovo/$', views.new, name='new'),
-    url(r'^index/(?P<slug>[\w\-]+)/$', views.show, name='show'),
-    url(r'^index/(?P<slug>[\w\-]+)/modifica/$', views.edit, name='edit'),
-    url(r'^index/(?P<slug>[\w\-]+)/valida/$', views.validate, name='validate'),
-    url(r'^ajax/load-subcategories/$', views.load_subcategories, name='ajax_load_subcategories'),
+    path('nuovo/', views.new, name='new'),
+    path('index/<slug:slug>/', views.show, name='show'),
+    path('index/<slug:slug>/modifica/', views.edit, name='edit'),
+    path('index/<slug:slug>/valida/', views.validate, name='validate'),
+    path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
 
 ]
 
