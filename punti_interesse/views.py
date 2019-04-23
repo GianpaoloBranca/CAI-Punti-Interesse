@@ -155,10 +155,10 @@ def remove_invalid_points(request):
     return HttpResponseRedirect(reverse('home'))
 
 def load_subcategories(request):
-    categoria = request.GET.get('categoria', '')
-    if categoria != '':
+    categoria = request.GET.get('categoria', -1)
+    try:
         sottocategorie = InteresseSpecifico.objects.filter(tipo=categoria)
-    else:
+    except ValueError:
         sottocategorie = InteresseSpecifico.objects.none()
     return render(request, 'punti_interesse/form_subcategory.html', {'sottocategorie' : sottocategorie})
 

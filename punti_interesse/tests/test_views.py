@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, AnonymousUser, Group
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from punti_interesse import views
-from punti_interesse.models import PuntoInteresse, UserInfo, ValidazionePunto
+from punti_interesse.models import PuntoInteresse, UserInfo, ValidazionePunto, InteresseSpecifico
 import populate
 
 class ViewTest(TestCase):
@@ -180,6 +180,32 @@ class ViewTest(TestCase):
         iterator = views.csv_iterator()
         self.assertEqual(next(iterator), ('Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'))
         self.assertEqual(next(iterator), (self.punto.nome, self.punto.latitudine, self.punto.longitudine, str(self.punto.categoria), str(self.punto.sottocategoria)))
+
+    # ---------- Ajax function --------
+
+    def test_load_subcategory(self):
+        request = self.factory.get(reverse('ajax_load_subcategories'))
+        cat = self.punto.categoria.id
+        request.GET = {'categoria' : cat}
+        response = views.load_subcategories(request)
+        n_options = InteresseSpecifico.objects.filter(tipo=cat).count()
+        # plus 1 for the unselected option, times 2 for closing tag
+        self.assertContains(response, 'option', count=(n_options+1)*2)
+        self.assertContains(response, str(self.punto.sottocategoria))
+
+    def test_load_subcategory_invalid_category(self):
+        request = self.factory.get(reverse('ajax_load_subcategories'))
+        request.GET = {'categoria' : 619}
+        response = views.load_subcategories(request)
+        # has only the unselected option
+        self.assertContains(response, 'option', count=2)
+
+    def test_load_subcategory_string_category(self):
+        request = self.factory.get(reverse('ajax_load_subcategories'))
+        request.GET = {'categoria' : 'something'}
+        response = views.load_subcategories(request)
+        # has only the unselected option
+        self.assertContains(response, 'option', count=2)
 
     # ---------- Error pages ----------
 
