@@ -1,7 +1,7 @@
 import csv
 from django.shortcuts import render
 from django.forms import modelformset_factory
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
@@ -182,19 +182,12 @@ def get_val(punto):
     except ValidazionePunto.DoesNotExist:
         return None
 
-# TODO: hack
 def save_fotos(fotoformset, punto):
-    for fotoform in fotoformset.cleaned_data:
-        if fotoform:
-            foto = fotoform['foto']
-            if fotoform['id']:
-                foto_acc = FotoAccessoria.objects.get(id=fotoform['id'].id)
-                foto_acc.punto = punto
-                foto_acc.foto = foto
-            else:
-                foto_acc = FotoAccessoria(foto=foto, punto=punto)
+    fotos = fotoformset.save(commit=False)
 
-            if fotoform['DELETE']:
-                foto_acc.delete()
-            else:
-                foto_acc.save()
+    for foto in fotoformset.deleted_objects:
+        foto.delete()
+
+    for foto_acc in fotos:
+        foto_acc.punto = punto
+        foto_acc.save()
