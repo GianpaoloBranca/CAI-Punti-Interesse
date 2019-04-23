@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, AnonymousUser, Group
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from punti_interesse import views
-from punti_interesse.models import PuntoInteresse, UserInfo
+from punti_interesse.models import PuntoInteresse, UserInfo, ValidazionePunto
 import populate
 
 class ViewTest(TestCase):
@@ -65,9 +65,9 @@ class ViewTest(TestCase):
     def test_new_user_is_not_rilevatore(self):
         response = views.new(self.request)
         response.client = Client()
-        self.assertRedirects(response, reverse('cas_ng_login') + '?next=' + reverse('home'), target_status_code=302)
+        self.assertEqual(response.status_code, 403)
 
-    @skip('post requests seems problematic to test')
+    @skip('skipping post requests for now')
     def test_new_post(self):
         # Non usa la request della classe di test ma una diversa (post)
         request = self.factory.post(reverse('new'))
@@ -100,19 +100,49 @@ class ViewTest(TestCase):
     def test_edit_user_is_not_rilevatore(self):
         response = views.edit(self.request, self.punto.slug)
         response.client = Client()
-        self.assertRedirects(response, reverse('cas_ng_login') + '?next=' + reverse('home'), target_status_code=302)
+        self.assertEqual(response.status_code, 403)
 
     def test_edit_punto_does_not_esists(self):
         self.user.groups.add(self.group_r)
         response = views.show(self.request, 'invalid-slug')
         self.assertEqual(response.status_code, 404)
 
-    def test_edit_post_request(self):
+    @skip('skipping post requests for now')
+    def test_edit_post(self):
         pass
 
     # ------- Validation page ---------
 
+    def test_validate(self):
+        self.user.groups.add(self.group_v)
+        response = views.validate(self.request, self.punto.slug)
+        self.assertEqual(response.status_code, 200)
 
+    def test_validate_user_is_not_validatore(self):
+        self.user.groups.add(self.group_r)
+        response = views.edit(self.request, self.punto.slug)
+        response.client = Client()
+        self.assertEqual(response.status_code, 403)
+
+    def test_validate_punto_does_not_exists(self):
+        self.user.groups.add(self.group_v)
+        response = views.show(self.request, '')
+        self.assertEqual(response.status_code, 404)
+
+    def test_validate_post(self):
+        self.user.groups.add(self.group_v)
+        request = self.factory.post(reverse('validate', kwargs={'slug' : self.punto.slug}))
+        request.POST = {
+            'regione' : 'LOM',
+            'quota' : 1500,
+            'descrizione' : 'testo'
+        }
+        request.user = self.user
+        response = views.validate(request, self.punto.slug)
+        self.assertEqual(response.status_code, 302)
+        val = ValidazionePunto.objects.get(punto=self.punto)
+        self.assertEqual(val.punto, self.punto)
+        val.delete()
 
     # ------- Admin functions ---------
 

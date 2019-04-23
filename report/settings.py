@@ -151,8 +151,7 @@ MEDIA_URL = '/media/'
 
 # Login
 
-LOGIN_URL = '/accounts/cas-login'
-#LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/cas-login/'
 
 # CAS
 
@@ -170,5 +169,5 @@ CAS_RENAME_ATTRIBUTES = {
 
 CAS_APPLY_ATTRIBUTES_TO_USER = True
 
-CAS_REDIRECT_URL = '/pi'
+CAS_REDIRECT_URL = '/pi/'
 CAS_STORE_NEXT = True

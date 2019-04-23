@@ -10,6 +10,7 @@ from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, Valida
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 from punti_interesse.utils import Echo, csv_iterator
 
+
 @login_required
 def home(request):
     lista_punti = PuntoInteresse.objects.order_by('data')
@@ -37,8 +38,10 @@ def show(request, slug):
     return render(request, 'punti_interesse/show.html', context_dict)
 
 @login_required
-@user_passes_test(is_rilevatore)
 def new(request):
+
+    if not is_rilevatore(request.user):
+        return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
 
     FotoFormSet = modelformset_factory(FotoAccessoria, form=FotoAccessoriaForm, extra=5, max_num=5)
 
@@ -65,8 +68,11 @@ def new(request):
     return render(request, 'punti_interesse/new.html', {'form' : form, 'fotoformset' : fotoformset})
 
 @login_required
-@user_passes_test(is_rilevatore)
 def edit(request, slug):
+
+    if not is_rilevatore(request.user):
+        return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
+
     punto = get_pi(slug)
 
     if not punto:
@@ -74,9 +80,9 @@ def edit(request, slug):
 
     try:
         if punto.rilevatore.extra.uuid != request.user.extra.uuid:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
     except (AttributeError, UserInfo.DoesNotExist):
-        return HttpResponseForbidden()
+        return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
 
     fotos = FotoAccessoria.objects.filter(punto=punto.id)
 
@@ -105,8 +111,11 @@ def edit(request, slug):
     return render(request, 'punti_interesse/edit.html', context_dict)
 
 @login_required
-@user_passes_test(is_validatore)
 def validate(request, slug):
+
+    if not is_validatore(request.user):
+        return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
+
     punto = get_pi(slug)
 
     if not punto:
