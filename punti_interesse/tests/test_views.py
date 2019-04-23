@@ -104,7 +104,7 @@ class ViewTest(TestCase):
 
     def test_edit_punto_does_not_esists(self):
         self.user.groups.add(self.group_r)
-        response = views.show(self.request, 'invalid-slug')
+        response = views.edit(self.request, 'invalid-slug')
         self.assertEqual(response.status_code, 404)
 
     @skip('skipping post requests for now')
@@ -120,13 +120,13 @@ class ViewTest(TestCase):
 
     def test_validate_user_is_not_validatore(self):
         self.user.groups.add(self.group_r)
-        response = views.edit(self.request, self.punto.slug)
+        response = views.validate(self.request, self.punto.slug)
         response.client = Client()
         self.assertEqual(response.status_code, 403)
 
     def test_validate_punto_does_not_exists(self):
         self.user.groups.add(self.group_v)
-        response = views.show(self.request, '')
+        response = views.validate(self.request, '')
         self.assertEqual(response.status_code, 404)
 
     def test_validate_post(self):
