@@ -1,9 +1,9 @@
-from django.conf.urls import url
 from django.urls import path
 from punti_interesse import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.home_alias),
+    path('index/', views.home, name='home'),
 
     # Admin only views
     path('export/', views.export_csv, name='export'),

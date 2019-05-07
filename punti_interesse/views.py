@@ -4,12 +4,14 @@ from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, StreamingHttpResponse, HttpResponsePermanentRedirect
 from punti_interesse.models import PuntoInteresse, ValidazionePunto, FotoAccessoria, InteresseSpecifico, UserInfo
 from punti_interesse.forms import PuntoInteresseForm, FotoAccessoriaForm, ValidazioneForm
 from punti_interesse.templatetags.pi_template_tags import is_rilevatore, is_validatore
 from punti_interesse.utils import Echo, csv_iterator
 
+def home_alias(request):
+    return HttpResponsePermanentRedirect(reverse('home'))
 
 @login_required
 def home(request):
