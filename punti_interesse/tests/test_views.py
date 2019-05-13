@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, AnonymousUser, Group
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from punti_interesse import views
-from punti_interesse.models import PuntoInteresse, UserInfo, ValidazionePunto, InteresseSpecifico
+from punti_interesse.models import PuntoInteresse, UserInfo, ValidazionePunto, InteresseSpecifico, StatoConservazione
 import populate
 
 class ViewTest(TestCase):
@@ -12,6 +12,7 @@ class ViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         populate.populate()
+        StatoConservazione.objects.get_or_create(id=2, descrizione='test')
         cls.group_r = Group.objects.get(name='Rilevatore')
         cls.group_v = Group.objects.get(name='Validatore')
         cls.factory = RequestFactory()
@@ -177,9 +178,28 @@ class ViewTest(TestCase):
         self.assertEqual(response.get('Content-Disposition'), 'attachment; filename="punti.csv"')
 
     def test_csv_iterator(self):
-        iterator = views.csv_iterator()
-        self.assertEqual(next(iterator), ('Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria'))
-        self.assertEqual(next(iterator), (self.punto.nome, self.punto.latitudine, self.punto.longitudine, str(self.punto.categoria), str(self.punto.sottocategoria)))
+        self.punto.validato = True
+        self.punto.save()
+        iterator = views.csv_iterator(self.request)
+        self.assertEqual(next(iterator), ('Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria', 'Link'))
+        self.assertEqual(
+            next(iterator),
+            (
+                self.punto.nome,
+                self.punto.latitudine,
+                self.punto.longitudine,
+                str(self.punto.categoria),
+                str(self.punto.sottocategoria),
+                self.request.build_absolute_uri(reverse('home')) + 'punto-vuoto'
+            )
+        )
+        self.punto.validato = False
+        self.punto.save()
+
+    def test_csv_iterator_no_valid_points(self):
+        iterator = views.csv_iterator(self.request)
+        self.assertEqual(next(iterator), ('Nome', 'Latitudine', 'Longitudine', 'Categoria', 'Sottocategoria', 'Link'))
+        self.assertRaises(StopIteration, next, iterator)
 
     # ---------- Ajax function --------
 

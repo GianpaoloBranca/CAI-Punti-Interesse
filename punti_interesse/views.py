@@ -147,7 +147,7 @@ def validate(request, slug):
 def export_csv(request):
     pseudo_buffer = Echo()
     writer = csv.writer(pseudo_buffer)
-    response = StreamingHttpResponse((writer.writerow(row) for row in csv_iterator()), content_type='text/csv')
+    response = StreamingHttpResponse((writer.writerow(row) for row in csv_iterator(request)), content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="punti.csv"'
     return response
 
