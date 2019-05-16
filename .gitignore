@@ -6,3 +6,4 @@ env/
 htmlcov/
 .coverage
 runtests.sh
+static/admin/
