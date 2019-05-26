@@ -20,12 +20,14 @@ def home(request):
     n_invalid = PuntoInteresse.objects.filter(validato=False).count()
     return render(request, 'punti_interesse/home.html', {'punti': lista_punti, 'n_valid': n_valid, 'n_invalid': n_invalid})
 
-@login_required
 def show(request, slug):
     punto = get_pi(slug)
 
     if not punto:
         return render(request, '404.html', status=404)
+
+    if not request.user.is_authenticated and not punto.validato:
+        return HttpResponseForbidden('<h1>403 Forbidden</h1>', content_type='text/html')
 
     val = get_val(punto)
 
